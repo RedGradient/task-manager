@@ -1,6 +1,7 @@
 package hexlet.code.service;
 
 import hexlet.code.dto.UserDto;
+import hexlet.code.enums.Role;
 import hexlet.code.models.User;
 import hexlet.code.models.UserDetailsImpl;
 import hexlet.code.repositories.UserRepository;
@@ -26,6 +27,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
+
+        // --- SET ROLE ---
+        user.setRole(Role.USER);
+        // ------------
+
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userRepository.save(user);
     }

@@ -1,9 +1,8 @@
 package hexlet.code.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import hexlet.code.enums.Role;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +37,9 @@ public class User extends BaseModel {
 
     @NotBlank
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public User(final Long id) {
         this.id = id;

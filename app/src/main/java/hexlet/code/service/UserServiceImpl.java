@@ -2,41 +2,23 @@ package hexlet.code.service;
 
 import hexlet.code.dto.UserDto;
 import hexlet.code.models.User;
+import hexlet.code.models.UserDetailsImpl;
 import hexlet.code.repositories.UserRepository;
-
+import hexlet.code.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import lombok.AllArgsConstructor;
-
-import static hexlet.code.config.security.SecurityConfiguration.DEFAULT_AUTHORITIES;
 
 
 @Service
-@Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
-
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
-
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-    public UserRepository getUserRepository() {
-        return this.userRepository;
-    }
-    public PasswordEncoder getPasswordEncoder() {
-        return this.passwordEncoder;
-    }
 
     @Override
     public User createNewUser(final UserDto userDto) {
@@ -59,17 +41,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String getCurrentUserName() {
-        // note: current user name is user's email
-        return SecurityContextHolder.getContext().getAuthentication().getName();
-    }
-
-    @Override
-    public User getCurrentUser() {
-        return userRepository.findByEmail(getCurrentUserName()).get();
-    }
-
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
                 .map(this::buildSpringUser)
@@ -77,10 +48,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private UserDetails buildSpringUser(final User user) {
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                DEFAULT_AUTHORITIES
-        );
+        return new UserDetailsImpl(user);
     }
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
-import hexlet.code.component.JWTHelper;
+import hexlet.code.component.JwtHelper;
 import hexlet.code.dto.UserDto;
 import hexlet.code.models.User;
 import hexlet.code.repositories.UserRepository;
@@ -50,7 +50,7 @@ public class TestUtils {
 //    private PostRepository postRepository;
 
     @Autowired
-    private JWTHelper jwtHelper;
+    private JwtHelper jwtHelper;
 
     public void tearDown() {
 //        postCommentRepository.deleteAll();
@@ -75,9 +75,9 @@ public class TestUtils {
     }
 
     public ResultActions perform(final MockHttpServletRequestBuilder request, final String byUser) throws Exception {
-        final String token = jwtHelper.expiring(Map.of("username", byUser));
-        request.header(AUTHORIZATION, token);
-
+//        final String token = jwtHelper.expiring(Map.of("username", byUser));
+//        request.header(AUTHORIZATION, token);
+//
         return perform(request);
     }
 

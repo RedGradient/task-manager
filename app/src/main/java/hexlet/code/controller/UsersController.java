@@ -1,6 +1,7 @@
 package hexlet.code.controller;
 
 import hexlet.code.UserNotFoundException;
+import hexlet.code.enums.Role;
 import hexlet.code.models.User;
 import hexlet.code.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,6 +50,7 @@ public class UsersController {
     @PostMapping(path = "")
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody User newUser) {
+        newUser.setRole(Role.USER);
         return userRepository.save(newUser);
     }
 

@@ -1,7 +1,7 @@
 build:
-	make -C app build
+	./gradlew clean build
 
 report:
-	make -C app report
+	./gradlew jacocoTestReport
 
 .PHONY: build

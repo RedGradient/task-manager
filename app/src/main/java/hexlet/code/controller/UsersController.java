@@ -1,9 +1,11 @@
 package hexlet.code.controller;
 
 import hexlet.code.UserNotFoundException;
+import hexlet.code.dto.UserDto;
 import hexlet.code.enums.Role;
 import hexlet.code.models.User;
 import hexlet.code.repositories.UserRepository;
+import hexlet.code.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,6 +23,9 @@ public class UsersController {
     private static final String ONLY_OWNER_BY_ID = """
         @userRepository.findById(#id).get().getEmail() == authentication.getName()
     """;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -49,9 +54,8 @@ public class UsersController {
     @ApiResponse(responseCode = "201", description = "User created")
     @PostMapping(path = "")
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody User newUser) {
-        newUser.setRole(Role.USER);
-        return userRepository.save(newUser);
+    public User createUser(@RequestBody UserDto newUser) {
+        return userService.createNewUser(newUser);
     }
 
     @Operation(summary = "Update user by id")

@@ -1,0 +1,129 @@
+plugins {
+    id 'java'
+    id 'application'
+
+    id 'jacoco'
+    id 'checkstyle'
+
+    id 'org.liquibase.gradle' version '2.1.1'
+    id 'org.springframework.boot' version '3.0.2'
+    id 'org.siouan.frontend-jdk11' version '6.0.0'
+    id 'com.github.ben-manes.versions' version '0.45.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'hexlet.code'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '17'
+
+frontend {
+    nodeVersion = '18.12.0'
+}
+
+compileJava {
+    options.release = 17
+    options.encoding = 'UTF-8'
+}
+
+application {
+    mainClass = 'hexlet.code.AppApplication'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:23.0.0'
+    annotationProcessor(
+        'org.projectlombok:lombok:1.18.26',
+        'com.querydsl:querydsl-apt:5.0.0:jpa',
+        'javax.annotation:javax.annotation-api:1.3.2',
+        'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final'
+    )
+
+    implementation(
+        'org.springframework.boot:spring-boot-starter-web',
+        'org.springframework.boot:spring-boot-starter-data-jpa',
+        'org.springframework.boot:spring-boot-starter-actuator',
+        'org.springframework.boot:spring-boot-starter-security',
+        'org.springframework.boot:spring-boot-starter-validation',
+
+        'com.querydsl:querydsl-jpa:5.0.0',
+        'com.querydsl:querydsl-core:5.0.0',
+        'com.h2database:h2:2.1.214',
+        'org.liquibase:liquibase-core:4.19.0',
+        'org.springdoc:springdoc-openapi-ui:1.5.12',
+        'com.rollbar:rollbar-spring-boot-webmvc:1.9.0',
+
+//        'io.jsonwebtoken:jjwt:0.9.1',
+        'io.jsonwebtoken:jjwt-api:0.11.5',
+        'io.jsonwebtoken:jjwt-impl:0.11.5',
+        'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    )
+
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'com.github.database-rider:rider-junit5:1.32.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    runtimeOnly(
+        'org.postgresql:postgresql:42.5.3'
+    )
+
+    liquibaseRuntime(
+        sourceSets.main.output,
+        'com.h2database:h2:2.1.214',
+        'info.picocli:picocli:4.7.1',
+        'org.liquibase:liquibase-core:4.19.0',
+        'org.liquibase.ext:liquibase-hibernate6:4.19.0',
+        'org.springframework.boot:spring-boot-starter-data-jpa',
+    )
+}
+
+test {
+    useJUnitPlatform()
+}
+
+diffChangeLog {
+    dependsOn compileJava
+}
+
+liquibase {
+    activities {
+        main {
+            changeLogFile 'src/main/resources/db/changelog/changelog-master.xml'
+
+            // Указываем источник, с которым будут сравниваться изменения
+            username ''
+            password ''
+            url 'jdbc:h2:file:./database-dev'
+
+            // Сравниваем с моделями, задавая пакет
+            referenceUrl 'hibernate:spring:hexlet.code.models' +
+                    '?dialect=org.hibernate.dialect.H2Dialect' +
+                    '&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy'
+        }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+checkstyle {
+    toolVersion '10.0'
+}
+checkstyleMain.source = "src/main/java"
+checkstyleTest.source = "src/test/java"
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+task stage(dependsOn: [clean, installDist])
+installDist.mustRunAfter clean
+
+diffChangeLog.dependsOn compileJava

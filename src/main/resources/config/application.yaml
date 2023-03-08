@@ -1,0 +1,28 @@
+server:
+  port: ${PORT:5001}
+
+base-url: "/api"
+
+jwt:
+  token:
+    secret: "4428472B4B6250655368566D597133743677397A244226452948404D635166546A576E5A7234753778214125442A462D4A614E645267556B5870327335763879"
+
+spring:
+  active:
+    profiles: dev
+
+  application:
+    name: taskManager
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.xml
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none

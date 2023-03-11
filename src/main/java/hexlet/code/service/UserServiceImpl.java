@@ -5,13 +5,13 @@ import hexlet.code.enums.Role;
 import hexlet.code.models.User;
 import hexlet.code.models.UserDetailsImpl;
 import hexlet.code.repositories.UserRepository;
-import hexlet.code.service.UserService;
+
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 
 @Service
@@ -27,11 +27,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
-
-        // --- SET ROLE ---
         user.setRole(Role.USER);
-        // ------------
-
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userRepository.save(user);
     }

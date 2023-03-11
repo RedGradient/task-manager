@@ -28,22 +28,22 @@ def configFrontendTasks = {
     outputs.dir("$buildDir/resources/main/static")
 }
 
-assembleFrontend {
-    configure configFrontendTasks
-
-    doLast {
-        copy {
-            from "$projectDir/frontend/build"
-            into "$buildDir/resources/main/static"
-        }
-    }
-}
-
-installFrontend {
-    configure configFrontendTasks
-}
-
-processResources.dependsOn assembleFrontend
+//assembleFrontend {
+//    configure configFrontendTasks
+//
+//    doLast {
+//        copy {
+//            from "$projectDir/frontend/build"
+//            into "$buildDir/resources/main/static"
+//        }
+//    }
+//}
+//
+//installFrontend {
+//    configure configFrontendTasks
+//}
+//
+//processResources.dependsOn assembleFrontend
 
 compileJava {
     options.release = 17

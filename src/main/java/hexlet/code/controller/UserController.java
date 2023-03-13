@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/users")
-public class UsersController {
+public class UserController {
 
     public static final String ID = "/{id}";
     public static final String USER_CONTROLLER_PATH = "/users";

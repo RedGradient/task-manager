@@ -73,9 +73,9 @@ public class UserControllerIT {
 
     @Test
     public void registration() throws Exception {
-        assertEquals(1, userRepository.count());
+        assertEquals(0, userRepository.count());
         utils.regDefaultUser().andExpect(status().isCreated());
-        assertEquals(2, userRepository.count());
+        assertEquals(1, userRepository.count());
     }
 
     @Test

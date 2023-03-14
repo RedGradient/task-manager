@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     public static final String ID = "/{id}";
-    public static final String USER_CONTROLLER_PATH = "/users";
+    public static final String USER_CONTROLLER_PATH = "/api/users";
     private static final String ONLY_OWNER_BY_ID = """
         @userRepository.findById(#id).get().getEmail() == authentication.getName()
         """;

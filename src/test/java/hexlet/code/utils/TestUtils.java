@@ -8,6 +8,7 @@ import hexlet.code.component.JwtHelper;
 import hexlet.code.dto.UserDto;
 import hexlet.code.models.User;
 import hexlet.code.repositories.UserRepository;
+import hexlet.code.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,12 +24,13 @@ public class TestUtils {
 
     public static final String TEST_USERNAME = "email@email.com";
     public static final String TEST_USERNAME_2 = "email2@email.com";
+    private static final String AUTHORIZATION = "AUTHORIZATION";
 
     private final UserDto testRegistrationDto = new UserDto(
             TEST_USERNAME,
-            "fname",
-            "lname",
-            "pwd"
+            "firstName",
+            "lastName",
+            "password"
     );
 
     public UserDto getTestRegistrationDto() {
@@ -40,6 +42,9 @@ public class TestUtils {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
 //    @Autowired
 //    private PostCommentRepository postCommentRepository;
@@ -73,9 +78,8 @@ public class TestUtils {
     }
 
     public ResultActions perform(final MockHttpServletRequestBuilder request, final String byUser) throws Exception {
-//        final String token = jwtHelper.expiring(Map.of("username", byUser));
-//        request.header(AUTHORIZATION, token);
-//
+        final String token = jwtHelper.generateToken(userService.loadUserByUsername(byUser));
+        request.header(AUTHORIZATION, "Bearer " + token);
         return perform(request);
     }
 

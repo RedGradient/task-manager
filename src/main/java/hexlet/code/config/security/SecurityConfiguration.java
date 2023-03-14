@@ -23,7 +23,7 @@ public class SecurityConfiguration {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public static final String LOGIN = "/login";
+    public static final String LOGIN = "/api/login";
 
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {

@@ -15,14 +15,14 @@ import lombok.AllArgsConstructor;
 public class UserDto {
 
     @NotBlank
+    @Email
+    private String email;
+
+    @NotBlank
     private String firstName;
 
     @NotBlank
     private String lastName;
-
-    @NotBlank
-    @Email
-    private String email;
 
     @NotBlank
     @Size(min = 5, max = 100)

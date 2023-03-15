@@ -1,5 +1,6 @@
 package hexlet.code.controller;
 
+import hexlet.code.UserAlreadyExists;
 import hexlet.code.models.User;
 import hexlet.code.dto.UserDto;
 import hexlet.code.service.UserService;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +55,7 @@ public class UserController {
         @ApiResponse(responseCode = "404", description = "User with that id not found")
     })
     @GetMapping(ID)
+    @PreAuthorize(ONLY_OWNER_BY_ID)
     public User getUser(@PathVariable Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
@@ -63,30 +66,34 @@ public class UserController {
     @PostMapping(path = "")
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody UserDto newUser) {
-        return userService.createNewUser(newUser);
-    }
-
-    @Operation(summary = "Update user by id")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "User updated"),
-        @ApiResponse(responseCode = "404", description = "User with that id not found")
-    })
-    @PutMapping(ID)
-    @PreAuthorize(ONLY_OWNER_BY_ID)
-    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        updatedUser.setId(id);
-        return userRepository.save(updatedUser);
+        try {
+            return userService.createNewUser(newUser);
+        } catch (Exception e) {
+            throw new UserAlreadyExists(newUser.getEmail());
+        }
     }
 
     @Operation(description = "Delete user by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "User deleted"),
-        @ApiResponse(responseCode = "404", description = "User with that id not found")
+            @ApiResponse(responseCode = "200", description = "User deleted"),
+            @ApiResponse(responseCode = "404", description = "User with that id not found")
     })
-    @DeleteMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
+    @DeleteMapping(ID)
     public void deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Operation(summary = "Update user by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated"),
+            @ApiResponse(responseCode = "404", description = "User with that id not found")
+    })
+    @PreAuthorize(ONLY_OWNER_BY_ID)
+    @PutMapping(ID)
+    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        updatedUser.setId(id);
+        return userRepository.save(updatedUser);
     }
 
 }

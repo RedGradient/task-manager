@@ -1,5 +1,6 @@
 package hexlet.code.controller;
 
+import hexlet.code.BadCredentialsException;
 import hexlet.code.dto.AuthenticationRequest;
 import hexlet.code.dto.AuthenticationResponse;
 import hexlet.code.service.AuthenticationService;
@@ -20,6 +21,10 @@ public class AuthenticationController {
 
     @PostMapping("/api/login")
     public ResponseEntity<AuthenticationResponse> createAuthToken(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(service.authenticate(request));
+        try {
+            return ResponseEntity.ok(service.authenticate(request));
+        } catch (Exception e) {
+            throw new BadCredentialsException();
+        }
     }
 }

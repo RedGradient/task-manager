@@ -98,14 +98,13 @@ public class UserControllerIT {
         assertEquals(expectedUser.getLastName(), user.getLastName());
     }
 
-    @Disabled("For now active only positive tests")
+//    @Disabled("For now active only positive tests")
     @Test
     public void getUserByIdFails() throws Exception {
         utils.regDefaultUser();
         final User expectedUser = userRepository.findAll().get(0);
         utils.perform(get(USER_CONTROLLER_PATH + ID, expectedUser.getId()))
                 .andExpect(status().isUnauthorized());
-
     }
 
     @Test
@@ -123,7 +122,7 @@ public class UserControllerIT {
     }
 
 
-    @Disabled("For now active only positive tests")
+//    @Disabled("For now active only positive tests")
     @Test
     public void twiceRegTheSameUserFail() throws Exception {
         utils.regDefaultUser().andExpect(status().isCreated());
@@ -143,7 +142,7 @@ public class UserControllerIT {
         utils.perform(loginRequest).andExpect(status().isOk());
     }
 
-    @Disabled("For now active only positive tests")
+//    @Disabled("For now active only positive tests")
     @Test
     public void loginFail() throws Exception {
         final LoginDto loginDto = new LoginDto(
@@ -185,7 +184,7 @@ public class UserControllerIT {
         assertEquals(0, userRepository.count());
     }
 
-    @Disabled("For now active only positive tests")
+//    @Disabled("For now active only positive tests")
     @Test
     public void deleteUserFails() throws Exception {
         utils.regDefaultUser();
@@ -198,7 +197,8 @@ public class UserControllerIT {
 
         final Long userId = userRepository.findByEmail(TEST_USERNAME).get().getId();
 
-        utils.perform(delete(USER_CONTROLLER_PATH + ID, userId), TEST_USERNAME_2)
+        utils.perform(
+                delete(USER_CONTROLLER_PATH + ID, userId), TEST_USERNAME_2)
                 .andExpect(status().isForbidden());
 
         assertEquals(2, userRepository.count());

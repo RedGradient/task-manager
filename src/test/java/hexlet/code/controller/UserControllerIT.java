@@ -10,7 +10,7 @@ import hexlet.code.repositories.UserRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -98,13 +98,12 @@ public class UserControllerIT {
         assertEquals(expectedUser.getLastName(), user.getLastName());
     }
 
-//    @Disabled("For now active only positive tests")
     @Test
     public void getUserByIdFails() throws Exception {
         utils.regDefaultUser();
         final User expectedUser = userRepository.findAll().get(0);
         utils.perform(get(USER_CONTROLLER_PATH + ID, expectedUser.getId()))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -122,7 +121,6 @@ public class UserControllerIT {
     }
 
 
-//    @Disabled("For now active only positive tests")
     @Test
     public void twiceRegTheSameUserFail() throws Exception {
         utils.regDefaultUser().andExpect(status().isCreated());
@@ -142,7 +140,6 @@ public class UserControllerIT {
         utils.perform(loginRequest).andExpect(status().isOk());
     }
 
-//    @Disabled("For now active only positive tests")
     @Test
     public void loginFail() throws Exception {
         final LoginDto loginDto = new LoginDto(
@@ -184,7 +181,7 @@ public class UserControllerIT {
         assertEquals(0, userRepository.count());
     }
 
-//    @Disabled("For now active only positive tests")
+    @Disabled("For now active only positive tests")
     @Test
     public void deleteUserFails() throws Exception {
         utils.regDefaultUser();

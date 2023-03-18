@@ -11,4 +11,10 @@ public interface UserService {
     User updateUser(Long id, UserDto userDto);
 
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+    Iterable<User> getUsers();
+
+    User getUser(Long id);
+
+    void deleteUser(Long id);
 }

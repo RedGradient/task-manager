@@ -181,7 +181,6 @@ public class UserControllerIT {
         assertEquals(0, userRepository.count());
     }
 
-    @Disabled("For now active only positive tests")
     @Test
     public void deleteUserFails() throws Exception {
         utils.regDefaultUser();

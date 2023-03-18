@@ -4,8 +4,6 @@ import hexlet.code.UserAlreadyExists;
 import hexlet.code.models.User;
 import hexlet.code.dto.UserDto;
 import hexlet.code.service.UserService;
-import hexlet.code.UserNotFoundException;
-import hexlet.code.repositories.UserRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,20 +30,17 @@ public class UserController {
     public static final String ID = "/{id}";
     public static final String USER_CONTROLLER_PATH = "/api/users";
     private static final String ONLY_OWNER_BY_ID = """
-        @userRepository.findById(#id).get().getEmail() == authentication.getName()
+        @userRepository.findById(#id).get().getEmail() == authentication.name
         """;
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Operation(summary = "Get list of all users")
     @ApiResponse(responseCode = "200", description = "List of all users")
     @GetMapping(path = "")
     public Iterable<User> getUsers() {
-        return userRepository.findAll();
+        return userService.getUsers();
     }
 
     @Operation(summary = "Get specific user by id")
@@ -56,8 +51,7 @@ public class UserController {
     @GetMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
     public User getUser(@PathVariable Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        return userService.getUser(id);
     }
 
     @Operation(summary = "Create user")
@@ -80,7 +74,7 @@ public class UserController {
     @PreAuthorize(ONLY_OWNER_BY_ID)
     @DeleteMapping(ID)
     public void deleteUser(@PathVariable Long id) {
-        userRepository.deleteById(id);
+        userService.deleteUser(id);
     }
 
     @Operation(summary = "Update user by id")
@@ -90,9 +84,8 @@ public class UserController {
     })
     @PreAuthorize(ONLY_OWNER_BY_ID)
     @PutMapping(ID)
-    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        updatedUser.setId(id);
-        return userRepository.save(updatedUser);
+    public User updateUser(@PathVariable Long id, @RequestBody UserDto updatedUser) {
+        return userService.updateUser(id, updatedUser);
     }
 
 }

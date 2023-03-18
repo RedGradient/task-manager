@@ -1,5 +1,6 @@
 package hexlet.code.service;
 
+import hexlet.code.UserNotFoundException;
 import hexlet.code.dto.UserDto;
 import hexlet.code.enums.Role;
 import hexlet.code.models.User;
@@ -47,6 +48,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByEmail(username)
                 .map(this::buildSpringUser)
                 .orElseThrow(() -> new UsernameNotFoundException("Not found user with 'username': " + username));
+    }
+
+    @Override
+    public Iterable<User> getUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException(id)
+        );
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
     private UserDetails buildSpringUser(final User user) {

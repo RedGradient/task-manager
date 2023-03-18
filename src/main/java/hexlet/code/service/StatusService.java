@@ -6,7 +6,9 @@ import hexlet.code.dto.StatusDto;
 import hexlet.code.models.Status;
 import hexlet.code.repositories.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class StatusService {
 
     @Autowired

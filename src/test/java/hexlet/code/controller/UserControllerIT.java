@@ -54,20 +54,21 @@ public class UserControllerIT {
 
     @Autowired
     private UserController controller;
-    @Test
-    public void contextLoads() {
-        assertNotNull(controller);
-    }
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private TestUtils utils;
+
 
     @AfterEach
     public void clear() {
         utils.tearDown();
+    }
+
+
+    @Test
+    public void contextLoads() {
+        assertNotNull(controller);
     }
 
     @Test
@@ -113,8 +114,9 @@ public class UserControllerIT {
                 .andReturn()
                 .getResponse();
 
-        final List<User> users = fromJson(response.getContentAsString(), new TypeReference<>() {
-        });
+        final List<User> users = fromJson(
+                response.getContentAsString(), new TypeReference<>() {}
+        );
 
         assertEquals(1, users.size());
     }

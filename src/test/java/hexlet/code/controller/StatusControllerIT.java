@@ -44,8 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
 public class StatusControllerIT {
 
-    private final static String STATUS_CONTROLLER_PATH = "/api/statuses";
-    private final static String ID = "/{id}";
+    private static final String STATUS_CONTROLLER_PATH = "/api/statuses";
+    private static final String ID = "/{id}";
 
     @Autowired
     private StatusController controller;
@@ -76,7 +76,7 @@ public class StatusControllerIT {
                 .andReturn()
                 .getResponse();
         final List<Status> statuses = fromJson(
-                response.getContentAsString(), new TypeReference<>() {}
+                response.getContentAsString(), new TypeReference<>() { }
         );
 
         assertEquals(1, statuses.size());
@@ -136,13 +136,13 @@ public class StatusControllerIT {
 
     @Disabled
     @Test
-    public void updateStatusFails() {}
+    public void updateStatusFails() { }
 
     @Disabled
     @Test
-    public void deleteStatus() {}
+    public void deleteStatus() { }
 
     @Disabled
     @Test
-    public void deleteStatusFails() {}
+    public void deleteStatusFails() { }
 }

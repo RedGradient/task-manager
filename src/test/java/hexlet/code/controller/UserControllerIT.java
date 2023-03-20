@@ -115,7 +115,7 @@ public class UserControllerIT {
                 .getResponse();
 
         final List<User> users = fromJson(
-                response.getContentAsString(), new TypeReference<>() {}
+                response.getContentAsString(), new TypeReference<>() { }
         );
 
         assertEquals(1, users.size());

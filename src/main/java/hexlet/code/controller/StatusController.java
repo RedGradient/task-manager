@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/statuses")
 public class StatusController {
 
-    private static final String ID = "/id";
+    private static final String ID = "/{id}";
     private static final String AUTHENTICATED = "isAuthenticated()";
 
     @Autowired

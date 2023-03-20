@@ -16,17 +16,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String BEARER = "Bearer ";
 
     @Autowired
     private JwtHelper jwtHelper;
-
     @Autowired
     private UserDetailsService userDetailsService;
 
-    public static final String AUTHORIZATION = "Authorization";
-    public static final String BEARER = "Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

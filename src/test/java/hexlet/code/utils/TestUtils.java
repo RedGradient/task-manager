@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.component.JwtHelper;
 import hexlet.code.dto.UserDto;
 import hexlet.code.models.User;
+import hexlet.code.repositories.StatusRepository;
 import hexlet.code.repositories.UserRepository;
 import hexlet.code.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,10 @@ public class TestUtils {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private StatusRepository statusRepository;
     @Autowired
     private UserService userService;
 
@@ -55,9 +56,11 @@ public class TestUtils {
     @Autowired
     private JwtHelper jwtHelper;
 
+
     public void tearDown() {
 //        postCommentRepository.deleteAll();
 //        postRepository.deleteAll();
+        statusRepository.deleteAll();
         userRepository.deleteAll();
     }
 

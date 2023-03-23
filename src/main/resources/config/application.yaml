@@ -8,8 +8,8 @@ jwt:
     secret: "4428472B4B6250655368566D597133743677397A244226452948404D635166546A576E5A7234753778214125442A462D4A614E645267556B5870327335763879"
 
 spring:
-  active:
-    profiles: dev
+  profiles:
+    active: dev
 
   application:
     name: taskManager

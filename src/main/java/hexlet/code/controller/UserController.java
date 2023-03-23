@@ -50,7 +50,7 @@ public class UserController {
     })
     @GetMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
-    public User getUser(@PathVariable Long id) {
+    public User getUserById(@PathVariable Long id) {
         return userService.getUser(id);
     }
 

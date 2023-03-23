@@ -1,11 +1,12 @@
 package hexlet.code.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
-@Setter
-@Getter
+
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class StatusDto {
     private String name;

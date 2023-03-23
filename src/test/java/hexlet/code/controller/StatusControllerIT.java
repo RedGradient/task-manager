@@ -4,12 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import hexlet.code.config.SpringConfigForIT;
 import hexlet.code.dto.StatusDto;
 import hexlet.code.models.Status;
-import hexlet.code.models.User;
 import hexlet.code.repositories.StatusRepository;
 import hexlet.code.repositories.UserRepository;
 import hexlet.code.utils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +18,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.utils.TestUtils.asJson;
 import static hexlet.code.utils.TestUtils.fromJson;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static hexlet.code.utils.TestUtils.TEST_USERNAME;
+import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-//import static org.junit.jupiter.api.Assertions.assertNull;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -92,21 +92,18 @@ public class StatusControllerIT {
                 .getResponse();
     }
 
-    @Disabled
     @Test
     public void createStatus() throws Exception {
         utils.regDefaultUser();
-        final User expectedUser = userRepository.findAll().get(0);
 
         var request = post(STATUS_CONTROLLER_PATH)
                 .content(asJson(new StatusDto("new")))
                 .contentType(APPLICATION_JSON);
 
-        utils.perform(request, expectedUser.getEmail()).andExpect(status().isCreated());
+        utils.perform(request, TEST_USERNAME).andExpect(status().isCreated());
         assertEquals(1, statusRepository.count());
     }
 
-    @Disabled
     @Test
     public void createStatusFails() throws Exception {
         var request = post(STATUS_CONTROLLER_PATH)
@@ -116,11 +113,9 @@ public class StatusControllerIT {
         assertEquals(0, statusRepository.count());
     }
 
-    @Disabled
     @Test
     public void updateStatus() throws Exception {
         utils.regDefaultUser();
-        final User expectedUser = userRepository.findAll().get(0);
 
         var status = new Status("new");
         statusRepository.save(status);
@@ -129,20 +124,45 @@ public class StatusControllerIT {
         var request = put(STATUS_CONTROLLER_PATH + ID, status.getId())
                 .content(asJson(new StatusDto(updatedName)))
                 .contentType(APPLICATION_JSON);
-        utils.perform(request, expectedUser.getEmail()).andExpect(status().isOk());
+        utils.perform(request, TEST_USERNAME).andExpect(status().isOk());
 
         assertEquals(statusRepository.findById(status.getId()).get().getName(), updatedName);
     }
 
-    @Disabled
     @Test
-    public void updateStatusFails() { }
+    public void updateStatusFails() throws Exception {
+        var status = new Status("new");
+        statusRepository.save(status);
 
-    @Disabled
-    @Test
-    public void deleteStatus() { }
+        var updatedName = "at work";
+        var request = put(STATUS_CONTROLLER_PATH + ID, status.getId())
+                .content(asJson(new StatusDto(updatedName)))
+                .contentType(APPLICATION_JSON);
+        utils.perform(request).andExpect(status().isForbidden());
 
-    @Disabled
+        assertNotEquals(statusRepository.findById(status.getId()).get().getName(), updatedName);
+    }
+
     @Test
-    public void deleteStatusFails() { }
+    public void deleteStatus() throws Exception {
+        utils.regDefaultUser();
+
+        var status = new Status("new");
+        statusRepository.save(status);
+        var request = delete(STATUS_CONTROLLER_PATH + ID, status.getId());
+        utils.perform(request, TEST_USERNAME)
+                .andExpect(status().isOk());
+
+        assertTrue(statusRepository.findById(status.getId()).isEmpty());
+    }
+
+    @Test
+    public void deleteStatusFails() throws Exception {
+        var status = new Status("new");
+        statusRepository.save(status);
+        var request = delete(STATUS_CONTROLLER_PATH + ID, status.getId());
+        utils.perform(request).andExpect(status().isForbidden());
+
+        assertTrue(statusRepository.findById(status.getId()).isPresent());
+    }
 }

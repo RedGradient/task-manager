@@ -19,15 +19,15 @@ public class Task extends BaseModel {
     private String name;
     @Lob
     private String description;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "task_status_id")
     @NotNull
     private TaskStatus taskStatus;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "author_id")
     @NotNull
     private User author;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "executor_id")
     private User executor;
 }

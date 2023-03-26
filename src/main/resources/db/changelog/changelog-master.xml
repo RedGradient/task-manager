@@ -1,12 +1,12 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="redgradient (generated)" id="1679858486418-1">
+    <changeSet author="redgradient (generated)" id="1679861201315-1">
         <createSequence incrementBy="50" sequenceName="statuses_seq" startValue="1"/>
     </changeSet>
-    <changeSet author="redgradient (generated)" id="1679858486418-2">
+    <changeSet author="redgradient (generated)" id="1679861201315-2">
         <createSequence incrementBy="50" sequenceName="users_seq" startValue="1"/>
     </changeSet>
-    <changeSet author="redgradient (generated)" id="1679858486418-3">
+    <changeSet author="redgradient (generated)" id="1679861201315-3">
         <createTable tableName="statuses">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="statusesPK"/>
@@ -19,7 +19,7 @@
             <column name="task_status_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="redgradient (generated)" id="1679858486418-4">
+    <changeSet author="redgradient (generated)" id="1679861201315-4">
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="usersPK"/>
@@ -35,16 +35,16 @@
             <column name="role" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="redgradient (generated)" id="1679858486418-5">
+    <changeSet author="redgradient (generated)" id="1679861201315-5">
         <addUniqueConstraint columnNames="email" constraintName="UC_USERSEMAIL_COL" tableName="users"/>
     </changeSet>
-    <changeSet author="redgradient (generated)" id="1679858486418-6">
+    <changeSet author="redgradient (generated)" id="1679861201315-6">
         <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="statuses" constraintName="FK5627rrimfkbkyic36xgrhak25" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="redgradient (generated)" id="1679858486418-7">
+    <changeSet author="redgradient (generated)" id="1679861201315-7">
         <addForeignKeyConstraint baseColumnNames="executor_id" baseTableName="statuses" constraintName="FKb00o5ye9491u6q872ktpngmhm" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="redgradient (generated)" id="1679858486418-8">
+    <changeSet author="redgradient (generated)" id="1679861201315-8">
         <addForeignKeyConstraint baseColumnNames="task_status_id" baseTableName="statuses" constraintName="FKi77w2ks4fjvw5ljkqp9punwq5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="statuses" validate="true"/>
     </changeSet>
 </databaseChangeLog>

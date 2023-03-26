@@ -31,6 +31,7 @@ public class User extends BaseModel {
     private String lastName;
 
     @NotBlank
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)

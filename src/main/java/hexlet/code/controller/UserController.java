@@ -51,7 +51,7 @@ public class UserController {
     @GetMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
     public User getUserById(@PathVariable Long id) {
-        return userService.getUser(id);
+        return userService.getUserById(id);
     }
 
     @Operation(summary = "Create user")

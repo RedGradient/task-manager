@@ -14,7 +14,7 @@ public interface UserService {
 
     Iterable<User> getUsers();
 
-    User getUser(Long id);
+    User getUserById(Long id);
 
     void deleteUser(Long id);
 }

@@ -7,8 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.component.JwtHelper;
 import hexlet.code.dto.UserDto;
 import hexlet.code.models.User;
-import hexlet.code.repositories.StatusRepository;
+import hexlet.code.repositories.TaskRepository;
+import hexlet.code.repositories.TaskStatusRepository;
 import hexlet.code.repositories.UserRepository;
+import hexlet.code.service.TaskService;
+import hexlet.code.service.TaskStatusService;
 import hexlet.code.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,8 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static hexlet.code.controller.TaskController.TASK_CONTROLLER;
+import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Component
@@ -40,26 +44,28 @@ public class TestUtils {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private StatusRepository statusRepository;
+
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
-//    @Autowired
-//    private PostCommentRepository postCommentRepository;
+    @Autowired
+    private TaskStatusService statusService;
+    @Autowired
+    private TaskStatusRepository statusRepository;
 
-//    @Autowired
-//    private PostRepository postRepository;
+    @Autowired
+    private TaskService taskService;
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Autowired
     private JwtHelper jwtHelper;
 
 
     public void tearDown() {
-//        postCommentRepository.deleteAll();
-//        postRepository.deleteAll();
+        taskRepository.deleteAll();
         statusRepository.deleteAll();
         userRepository.deleteAll();
     }

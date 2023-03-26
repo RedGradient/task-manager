@@ -28,5 +28,4 @@ public class BaseModel {
     @Temporal(TIMESTAMP)
     protected Date createdAt;
 
-    private boolean active = true;
 }

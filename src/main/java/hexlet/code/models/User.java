@@ -1,5 +1,6 @@
 package hexlet.code.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hexlet.code.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +35,8 @@ public class User extends BaseModel {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private boolean active = true;
 
     public User(final Long id) {
         this.id = id;

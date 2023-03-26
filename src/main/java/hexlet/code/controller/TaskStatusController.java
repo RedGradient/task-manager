@@ -1,8 +1,8 @@
 package hexlet.code.controller;
 
-import hexlet.code.dto.StatusDto;
-import hexlet.code.models.Status;
-import hexlet.code.service.StatusService;
+import hexlet.code.dto.TaskStatusDto;
+import hexlet.code.models.TaskStatus;
+import hexlet.code.service.TaskStatusService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,18 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/statuses")
-public class StatusController {
+public class TaskStatusController {
 
     private static final String ID = "/{id}";
     private static final String AUTHENTICATED = "isAuthenticated()";
 
     @Autowired
-    private StatusService statusService;
+    private TaskStatusService statusService;
 
     @Operation(summary = "Get list of all statuses")
     @ApiResponse(responseCode = "200", description = "List of all statuses")
     @GetMapping
-    public Iterable<Status> getStatuses() {
+    public Iterable<TaskStatus> getStatuses() {
         return statusService.getStatuses();
     }
 
@@ -45,8 +45,8 @@ public class StatusController {
         @ApiResponse(responseCode = "404", description = "Status with that id not found")
     })
     @GetMapping(ID)
-    public Status getStatusById(@PathVariable Long id) {
-        return statusService.getStatus(id);
+    public TaskStatus getStatusById(@PathVariable Long id) {
+        return statusService.getStatusById(id);
     }
 
     @Operation(summary = "Create status")
@@ -54,7 +54,7 @@ public class StatusController {
     @PreAuthorize(AUTHENTICATED)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Status createStatus(@RequestBody StatusDto statusDto) {
+    public TaskStatus createStatus(@RequestBody TaskStatusDto statusDto) {
         return statusService.createNewStatus(statusDto);
     }
 
@@ -65,7 +65,7 @@ public class StatusController {
     })
     @PreAuthorize(AUTHENTICATED)
     @PutMapping(ID)
-    public Status updateStatus(@PathVariable Long id, @RequestBody StatusDto statusDto) {
+    public TaskStatus updateStatus(@PathVariable Long id, @RequestBody TaskStatusDto statusDto) {
         return statusService.updateStatus(id, statusDto);
     }
 

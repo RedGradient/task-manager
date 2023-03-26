@@ -2,36 +2,36 @@ package hexlet.code.service;
 
 
 import hexlet.code.StatusNotFoundException;
-import hexlet.code.dto.StatusDto;
-import hexlet.code.models.Status;
-import hexlet.code.repositories.StatusRepository;
+import hexlet.code.dto.TaskStatusDto;
+import hexlet.code.models.TaskStatus;
+import hexlet.code.repositories.TaskStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StatusService {
+public class TaskStatusService {
 
     @Autowired
-    private StatusRepository repository;
+    private TaskStatusRepository repository;
 
-    public Iterable<Status> getStatuses() {
+    public Iterable<TaskStatus> getStatuses() {
         return repository.findAll();
     }
 
-    public Status getStatus(Long id) {
+    public TaskStatus getStatusById(Long id) {
         return repository.findById(id).orElseThrow(
                 () -> new StatusNotFoundException(id)
         );
     }
 
-    public Status createNewStatus(StatusDto statusDto) {
-        final Status newStatus = new Status();
+    public TaskStatus createNewStatus(TaskStatusDto statusDto) {
+        final TaskStatus newStatus = new TaskStatus();
         newStatus.setName(statusDto.getName());
         return repository.save(newStatus);
     }
 
-    public Status updateStatus(Long id, StatusDto statusDto) {
-        final Status statusToUpdate = repository.findById(id).get();
+    public TaskStatus updateStatus(Long id, TaskStatusDto statusDto) {
+        final TaskStatus statusToUpdate = repository.findById(id).get();
         statusToUpdate.setName(statusDto.getName());
         return repository.save(statusToUpdate);
     }

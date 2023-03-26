@@ -8,6 +8,6 @@ import lombok.AllArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatusDto {
+public class TaskStatusDto {
     private String name;
 }

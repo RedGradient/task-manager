@@ -2,9 +2,9 @@ package hexlet.code.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import hexlet.code.config.SpringConfigForIT;
-import hexlet.code.dto.StatusDto;
-import hexlet.code.models.Status;
-import hexlet.code.repositories.StatusRepository;
+import hexlet.code.dto.TaskStatusDto;
+import hexlet.code.models.TaskStatus;
+import hexlet.code.repositories.TaskStatusRepository;
 import hexlet.code.repositories.UserRepository;
 import hexlet.code.utils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -42,15 +42,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles(TEST_PROFILE)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
-public class StatusControllerIT {
+public class TaskStatusControllerIT {
 
     private static final String STATUS_CONTROLLER_PATH = "/api/statuses";
     private static final String ID = "/{id}";
 
     @Autowired
-    private StatusController controller;
+    private TaskStatusController controller;
     @Autowired
-    private StatusRepository statusRepository;
+    private TaskStatusRepository statusRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -70,12 +70,12 @@ public class StatusControllerIT {
 
     @Test
     public void getStatuses() throws Exception {
-        statusRepository.save(new Status("new"));
+        statusRepository.save(new TaskStatus("new"));
         final var response = utils.perform(get(STATUS_CONTROLLER_PATH))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
-        final List<Status> statuses = fromJson(
+        final List<TaskStatus> statuses = fromJson(
                 response.getContentAsString(), new TypeReference<>() { }
         );
 
@@ -84,7 +84,7 @@ public class StatusControllerIT {
 
     @Test
     public void getStatusById() throws Exception {
-        var status = new Status("new");
+        var status = new TaskStatus("new");
         statusRepository.save(status);
         final var response = utils.perform(get(STATUS_CONTROLLER_PATH + ID, status.getId()))
                 .andExpect(status().isOk())
@@ -97,7 +97,7 @@ public class StatusControllerIT {
         utils.regDefaultUser();
 
         var request = post(STATUS_CONTROLLER_PATH)
-                .content(asJson(new StatusDto("new")))
+                .content(asJson(new TaskStatusDto("new")))
                 .contentType(APPLICATION_JSON);
 
         utils.perform(request, TEST_USERNAME).andExpect(status().isCreated());
@@ -107,7 +107,7 @@ public class StatusControllerIT {
     @Test
     public void createStatusFails() throws Exception {
         var request = post(STATUS_CONTROLLER_PATH)
-                .content(asJson(new StatusDto("new")))
+                .content(asJson(new TaskStatusDto("new")))
                 .contentType(APPLICATION_JSON);
         utils.perform(request).andExpect(status().isForbidden());
         assertEquals(0, statusRepository.count());
@@ -117,12 +117,12 @@ public class StatusControllerIT {
     public void updateStatus() throws Exception {
         utils.regDefaultUser();
 
-        var status = new Status("new");
+        var status = new TaskStatus("new");
         statusRepository.save(status);
 
         var updatedName = "at work";
         var request = put(STATUS_CONTROLLER_PATH + ID, status.getId())
-                .content(asJson(new StatusDto(updatedName)))
+                .content(asJson(new TaskStatusDto(updatedName)))
                 .contentType(APPLICATION_JSON);
         utils.perform(request, TEST_USERNAME).andExpect(status().isOk());
 
@@ -131,12 +131,12 @@ public class StatusControllerIT {
 
     @Test
     public void updateStatusFails() throws Exception {
-        var status = new Status("new");
+        var status = new TaskStatus("new");
         statusRepository.save(status);
 
         var updatedName = "at work";
         var request = put(STATUS_CONTROLLER_PATH + ID, status.getId())
-                .content(asJson(new StatusDto(updatedName)))
+                .content(asJson(new TaskStatusDto(updatedName)))
                 .contentType(APPLICATION_JSON);
         utils.perform(request).andExpect(status().isForbidden());
 
@@ -147,7 +147,7 @@ public class StatusControllerIT {
     public void deleteStatus() throws Exception {
         utils.regDefaultUser();
 
-        var status = new Status("new");
+        var status = new TaskStatus("new");
         statusRepository.save(status);
         var request = delete(STATUS_CONTROLLER_PATH + ID, status.getId());
         utils.perform(request, TEST_USERNAME)
@@ -158,7 +158,7 @@ public class StatusControllerIT {
 
     @Test
     public void deleteStatusFails() throws Exception {
-        var status = new Status("new");
+        var status = new TaskStatus("new");
         statusRepository.save(status);
         var request = delete(STATUS_CONTROLLER_PATH + ID, status.getId());
         utils.perform(request).andExpect(status().isForbidden());

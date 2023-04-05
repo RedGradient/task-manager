@@ -1,6 +1,6 @@
 package hexlet.code.controller;
 
-import hexlet.code.UserAlreadyExists;
+import hexlet.code.exceptions.UserAlreadyExistsException;
 import hexlet.code.models.User;
 import hexlet.code.dto.UserDto;
 import hexlet.code.service.UserService;
@@ -62,7 +62,7 @@ public class UserController {
         try {
             return userService.createNewUser(newUser);
         } catch (Exception e) {
-            throw new UserAlreadyExists(newUser.getEmail());
+            throw new UserAlreadyExistsException(newUser.getEmail());
         }
     }
 

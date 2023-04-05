@@ -1,6 +1,6 @@
 package hexlet.code.service;
 
-import hexlet.code.UserNotFoundException;
+import hexlet.code.exceptions.UserNotFoundException;
 import hexlet.code.dto.UserDto;
 import hexlet.code.enums.Role;
 import hexlet.code.models.User;

@@ -1,7 +1,7 @@
 package hexlet.code.service;
 
 
-import hexlet.code.TaskNotFoundException;
+import hexlet.code.exceptions.TaskNotFoundException;
 import hexlet.code.dto.TaskDto;
 import hexlet.code.models.Task;
 import hexlet.code.repositories.TaskRepository;

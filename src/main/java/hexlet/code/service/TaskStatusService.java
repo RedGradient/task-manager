@@ -1,7 +1,7 @@
 package hexlet.code.service;
 
 
-import hexlet.code.StatusNotFoundException;
+import hexlet.code.exceptions.StatusNotFoundException;
 import hexlet.code.dto.TaskStatusDto;
 import hexlet.code.models.TaskStatus;
 import hexlet.code.repositories.TaskStatusRepository;

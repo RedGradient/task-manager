@@ -6,11 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Builder
 @Getter
 @Setter
 @Entity
-@Table(name = "statuses")
+@Table(name = "tasks")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Task extends BaseModel {
@@ -23,6 +26,11 @@ public class Task extends BaseModel {
     @JoinColumn(name = "task_status_id")
     @NotNull
     private TaskStatus taskStatus;
+
+    @ManyToMany
+    @Builder.Default
+    private Set<Label> labels = new HashSet<>();
+
     @ManyToOne
     @JoinColumn(name = "author_id")
     @NotNull

@@ -9,6 +9,7 @@ import hexlet.code.dto.TaskStatusDto;
 import hexlet.code.dto.UserDto;
 import hexlet.code.models.Label;
 import hexlet.code.models.Task;
+import hexlet.code.repositories.LabelRepository;
 import hexlet.code.repositories.TaskRepository;
 import hexlet.code.repositories.TaskStatusRepository;
 import hexlet.code.repositories.UserRepository;
@@ -80,6 +81,8 @@ public class TaskControllerIT {
     @Autowired
     private LabelService labelService;
     @Autowired
+    private LabelRepository labelRepository;
+    @Autowired
     private TestUtils utils;
 
     @BeforeAll
@@ -100,6 +103,7 @@ public class TaskControllerIT {
     public void clear() {
         taskRepository.deleteAll();
         statusRepository.deleteAll();
+        labelRepository.deleteAll();
     }
 
     @Test
@@ -220,42 +224,38 @@ public class TaskControllerIT {
 
     @Test
     public void updateTask() throws Exception {
+        // --- create task ---
         var author = utils.getUserByEmail(TEST_USERNAME);
         var executor = utils.getUserByEmail(EXECUTOR_USERNAME);
         var taskStatus = statusService.createNewStatus(new TaskStatusDto("New"));
-        var taskName = "Task";
-        var oldDescr = "Old Description";
         var labels = new HashSet<Label>();
-        labels.add(labelService.createLabel(new LabelDto("Feature")));
-        var task = new Task(
-                taskName,
-                oldDescr,
-                taskStatus,
-                labels,
-                author,
-                executor
-        );
+        var oldLabel = labelService.createLabel(new LabelDto("Feature"));
+        labels.add(oldLabel);
+        var task = new Task("Task", "Old Descr", taskStatus, labels, author, executor);
         taskRepository.save(task);
+        // ------------------
 
-        assertEquals(taskRepository.findById(task.getId()).get().getDescription(), oldDescr);
-
-        var newDescr = "Updated description";
+        // --- create updated task dto ---
+        var newName = "Updated Name";
+        var newDescr = "Updated Description";
         var labelIds = new HashSet<Long>();
-        labelIds.add(labelService.createLabel(new LabelDto("Feature")).getId());
-        var newTaskDto = new TaskDto(
-                taskName,
-                newDescr,
-                taskStatus.getId(),
-                labelIds,
-                executor.getId()
-        );
+        var newLabel = labelService.createLabel(new LabelDto("Bug"));
+        labelIds.add(newLabel.getId());
+
+        var newTaskDto = new TaskDto(newName, newDescr, taskStatus.getId(), labelIds, executor.getId());
+        // ------------------------------
+
         var request = put(TASKS_CONTROLLER + ID, task.getId())
                 .content(asJson(newTaskDto))
                 .contentType(APPLICATION_JSON);
-
         utils.perform(request, TEST_USERNAME).andExpect(status().isOk());
 
-        assertEquals(taskRepository.findById(task.getId()).get().getDescription(), newDescr);
+        var updatedTask = taskRepository.findById(task.getId()).get();
+        assertEquals(updatedTask.getName(), newName);
+        assertEquals(updatedTask.getDescription(), newDescr);
+        updatedTask.getLabels().forEach(
+                (label) -> assertEquals(newLabel.getId(), label.getId())
+        );
     }
 
     @Test
@@ -266,22 +266,16 @@ public class TaskControllerIT {
         var taskName = "Task";
         var oldDescr = "Old Description";
         var labels = new HashSet<Label>();
-        labels.add(labelService.createLabel(new LabelDto("Feature")));
-        var task = new Task(
-                taskName,
-                oldDescr,
-                taskStatus,
-                labels,
-                author,
-                executor
-        );
-        taskRepository.save(task);
+        var oldLabel = labelService.createLabel(new LabelDto("Feature"));
+        labels.add(oldLabel);
 
-        assertEquals(taskRepository.findById(task.getId()).get().getDescription(), oldDescr);
+        var task = new Task(taskName, oldDescr, taskStatus, labels, author, executor);
+        taskRepository.save(task);
 
         var newDescr = "Updated description";
         var labelIds = new HashSet<Long>();
-        labelIds.add(labelService.createLabel(new LabelDto("Feature")).getId());
+        var newLabel = labelService.createLabel(new LabelDto("Bug"));
+        labelIds.add(newLabel.getId());
         var newTaskDto = new TaskDto(
                 taskName,
                 newDescr,
@@ -289,10 +283,10 @@ public class TaskControllerIT {
                 labelIds,
                 executor.getId()
         );
+
         var request = put(TASKS_CONTROLLER + ID, task.getId())
                 .content(asJson(newTaskDto))
                 .contentType(APPLICATION_JSON);
-
         utils.perform(request).andExpect(status().isForbidden());
 
         assertNotEquals(taskRepository.findById(task.getId()).get().getDescription(), newDescr);

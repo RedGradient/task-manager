@@ -3,11 +3,15 @@ package hexlet.code.service;
 
 import hexlet.code.exceptions.TaskNotFoundException;
 import hexlet.code.dto.TaskDto;
+import hexlet.code.models.Label;
 import hexlet.code.models.Task;
+import hexlet.code.repositories.LabelRepository;
 import hexlet.code.repositories.TaskRepository;
 import hexlet.code.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
 
 
 @Service
@@ -21,6 +25,10 @@ public class TaskService {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private LabelService labelService;
+    @Autowired
+    private LabelRepository labelRepository;
 
     public Long getTasksCount() {
         return taskRepository.count();
@@ -56,10 +64,16 @@ public class TaskService {
     }
 
     public Task fromDto(TaskDto taskDto) {
+        var labels = new HashSet<Label>();
+        taskDto.getLabelIds().forEach(
+                (id) -> labels.add(labelService.getLabelById(id))
+        );
+
         return Task.builder()
             .name(taskDto.getName())
             .description(taskDto.getDescription())
             .taskStatus(statusService.getStatusById(taskDto.getTaskStatusId()))
+            .labels(labels)
             .author(userService.getCurrentUser())
             .executor(userService.getUserById(taskDto.getExecutorId()))
             .build();

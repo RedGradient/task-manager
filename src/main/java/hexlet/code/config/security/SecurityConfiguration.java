@@ -38,9 +38,6 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/users").permitAll()
                 .requestMatchers("/api/statuses/**").permitAll()
 
-                // temporal
-                .requestMatchers("/api/tasks/**").permitAll()
-
                 .anyRequest().authenticated();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

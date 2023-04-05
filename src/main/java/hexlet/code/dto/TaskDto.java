@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 
 @Data
 @NoArgsConstructor
@@ -19,5 +21,6 @@ public class TaskDto {
     @NotNull
     @NotBlank
     private Long taskStatusId;
+    private Set<Long> labelIds;
     private Long executorId;
 }

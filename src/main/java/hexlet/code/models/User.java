@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @Entity
@@ -41,5 +43,26 @@ public class User extends BaseModel {
 
     public User(final Long id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User anotherUser)) {
+            return false;
+        }
+        return Objects.equals(getEmail(), anotherUser.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEmail());
+    }
+
+    @Override
+    public String toString() {
+        return getEmail();
     }
 }

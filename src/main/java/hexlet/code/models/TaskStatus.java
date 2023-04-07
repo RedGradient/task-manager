@@ -21,6 +21,7 @@ import java.util.Objects;
 public class TaskStatus extends BaseModel {
     @NotNull
     @NotBlank
+    @Column(unique = true)
     private String name;
 
     @Override

@@ -7,6 +7,8 @@ import hexlet.code.repositories.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LabelService {
 
@@ -24,8 +26,8 @@ public class LabelService {
         );
     }
 
-    public Iterable<Label> getAllLabels() {
-        return labelRepository.findAll();
+    public List<Label> getAllLabels() {
+        return (List<Label>) labelRepository.findAll();
     }
 
     public Label updateLabel(long id, LabelDto labelDto) {

@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static hexlet.code.controller.TaskController.TASK_CONTROLLER;
 import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 

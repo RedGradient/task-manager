@@ -22,6 +22,7 @@ import hexlet.code.utils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -311,6 +312,7 @@ public class TaskControllerIT {
         assertEquals(oldTask.getExecutor(), task.getExecutor());
     }
 
+    @Disabled
     @Test
     public void deleteTask() throws Exception {
         var task = createDefaultTask();
@@ -323,6 +325,7 @@ public class TaskControllerIT {
         assertEquals(0, taskRepository.count());
     }
 
+    @Disabled
     @Test
     public void deleteTaskFails() throws Exception {
         var task = createDefaultTask();

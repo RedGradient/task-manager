@@ -1,6 +1,7 @@
 package hexlet.code.controller;
 
 
+//import com.querydsl.core.types.Predicate;
 import hexlet.code.dto.TaskDto;
 import hexlet.code.models.Task;
 import hexlet.code.service.TaskService;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 
+//import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,6 +43,13 @@ public class TaskController {
     @ApiResponse(responseCode = "200", description = "List of all tasks")
     @GetMapping
     public Iterable<Task> getAllTasks() {
+//        @QuerydslPredicate(root = Task.class) Predicate predicate
+//        if (predicate != null) {
+//            return taskService.getTasks(predicate);
+//        } else {
+//            return taskService.getTasks();
+//        }
+
         return taskService.getTasks();
     }
 

@@ -1,6 +1,7 @@
 package hexlet.code.service;
 
 
+//import com.querydsl.core.types.Predicate;
 import hexlet.code.exceptions.TaskNotFoundException;
 import hexlet.code.dto.TaskDto;
 import hexlet.code.models.Label;
@@ -37,6 +38,10 @@ public class TaskService {
     public Iterable<Task> getTasks() {
         return taskRepository.findAll();
     }
+
+//    public Iterable<Task> getTasks(Predicate predicate) {
+//        return taskRepository.findAll(predicate);
+//    }
 
     public Task createTask(TaskDto taskDto) {
         return taskRepository.save(fromDto(taskDto));

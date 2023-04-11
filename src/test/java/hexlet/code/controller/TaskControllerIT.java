@@ -22,7 +22,6 @@ import hexlet.code.utils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -172,63 +171,63 @@ public class TaskControllerIT {
 
     @Test
     public void getTasksByParams() throws Exception {
-        var user_1 = utils.getUserByEmail(TEST_USERNAME);
-        var user_2 = utils.getUserByEmail(EXECUTOR_USERNAME);
-        var taskStatus_1 = statusService.createNewStatus(new TaskStatusDto("Status 1"));
-        var taskStatus_2 = statusService.createNewStatus(new TaskStatusDto("Status 2"));
+        var user1 = utils.getUserByEmail(TEST_USERNAME);
+        var user2 = utils.getUserByEmail(EXECUTOR_USERNAME);
+        var taskStatus1 = statusService.createNewStatus(new TaskStatusDto("Status 1"));
+        var taskStatus2 = statusService.createNewStatus(new TaskStatusDto("Status 2"));
 
-        var labels_1 = new HashSet<Label>();
-        var labels_2 = new HashSet<Label>();
-        var label_1 = labelService.createLabel(new LabelDto("Label 1"));
-        var label_2 = labelService.createLabel(new LabelDto("Label 2"));
-        var label_3 = labelService.createLabel(new LabelDto("Label 3"));
-        labels_1.add(label_1);
-        labels_2.add(label_2);
-        labels_2.add(label_3);
+        var labels1 = new HashSet<Label>();
+        var labels2 = new HashSet<Label>();
+        var label1 = labelService.createLabel(new LabelDto("Label 1"));
+        var label2 = labelService.createLabel(new LabelDto("Label 2"));
+        var label3 = labelService.createLabel(new LabelDto("Label 3"));
+        labels1.add(label1);
+        labels2.add(label2);
+        labels2.add(label3);
 
-        taskRepository.save(new Task("Task 1", "Descr", taskStatus_1, labels_1, user_1, user_2));
-        taskRepository.save(new Task("Task 2", "Descr", taskStatus_2, labels_2, user_2, user_1));
-        taskRepository.save(new Task("Task 3", "Descr", taskStatus_2, labels_2, user_2, user_2));
+        taskRepository.save(new Task("Task 1", "Descr", taskStatus1, labels1, user1, user2));
+        taskRepository.save(new Task("Task 2", "Descr", taskStatus2, labels2, user2, user1));
+        taskRepository.save(new Task("Task 3", "Descr", taskStatus2, labels2, user2, user2));
 
         // check param: 'taskStatusId'
         final long expectedTaskStatusId = 2;
-        var request_1 = get(TASK_CONTROLLER)
+        var request1 = get(TASK_CONTROLLER)
                 .param("taskStatusId", String.valueOf(expectedTaskStatusId));
-        var response_1 = utils.perform(request_1).andExpect(status().isOk()).andReturn().getResponse();
-        final List<Task> tasks_1 = fromJson(response_1.getContentAsString(), new TypeReference<>() { });
-        assertEquals(2, tasks_1.size(), "Collection has incorrect size");
-        assertEquals(expectedTaskStatusId, tasks_1.get(0).getTaskStatus().getId(),"Task has incorrect task status");
+        var response1 = utils.perform(request1).andExpect(status().isOk()).andReturn().getResponse();
+        final List<Task> tasks1 = fromJson(response1.getContentAsString(), new TypeReference<>() { });
+        assertEquals(2, tasks1.size(), "Collection has incorrect size");
+        assertEquals(expectedTaskStatusId, tasks1.get(0).getTaskStatus().getId(), "Task has incorrect task status");
 
         // check param: 'authorId'
         final long expectedAuthorId = 1;
-        var request_2 = get(TASK_CONTROLLER)
+        var request2 = get(TASK_CONTROLLER)
                 .param("authorId", String.valueOf(expectedAuthorId));
-        var response_2 = utils.perform(request_2)
+        var response2 = utils.perform(request2)
                 .andExpect(status().isOk()).andReturn().getResponse();
-        final List<Task> tasks_2 = fromJson(response_2.getContentAsString(), new TypeReference<>() { });
-        assertEquals(1, tasks_2.size(), "Collection has incorrect size");
-        assertEquals(expectedAuthorId, tasks_2.get(0).getAuthor().getId(), "Task has incorrect author");
+        final List<Task> tasks2 = fromJson(response2.getContentAsString(), new TypeReference<>() { });
+        assertEquals(1, tasks2.size(), "Collection has incorrect size");
+        assertEquals(expectedAuthorId, tasks2.get(0).getAuthor().getId(), "Task has incorrect author");
 
         // check param: 'executorId'
         var expectedExecutorId = 2;
-        var request_3 = get(TASK_CONTROLLER)
+        var request3 = get(TASK_CONTROLLER)
                 .param("executorId", String.valueOf(expectedExecutorId));
-        var response_3 = utils.perform(request_3)
+        var response3 = utils.perform(request3)
                 .andExpect(status().isOk()).andReturn().getResponse();
-        final List<Task> tasks_3 = fromJson(response_3.getContentAsString(), new TypeReference<>() { });
-        assertEquals(2, tasks_3.size(), "Collection has incorrect size");
-        assertEquals(expectedExecutorId, tasks_3.get(0).getExecutor().getId(), "Task has incorrect executor");
-        assertEquals(expectedExecutorId, tasks_3.get(1).getExecutor().getId(), "Task has incorrect executor");
+        final List<Task> tasks3 = fromJson(response3.getContentAsString(), new TypeReference<>() { });
+        assertEquals(2, tasks3.size(), "Collection has incorrect size");
+        assertEquals(expectedExecutorId, tasks3.get(0).getExecutor().getId(), "Task has incorrect executor");
+        assertEquals(expectedExecutorId, tasks3.get(1).getExecutor().getId(), "Task has incorrect executor");
 
         // check param: 'labels'
         var expectedLabelId = 1;
-        var request_4 = get(TASK_CONTROLLER)
+        var request4 = get(TASK_CONTROLLER)
                 .param("labels", String.valueOf(expectedLabelId));
-        var response_4 = utils.perform(request_4)
+        var response4 = utils.perform(request4)
                 .andExpect(status().isOk()).andReturn().getResponse();
-        final List<Task> tasks_4 = fromJson(response_4.getContentAsString(), new TypeReference<>() { });
-        assertEquals(1, tasks_4.size(), "Collection has incorrect size");
-        assertTrue(tasks_4.get(0).getLabels().contains(label_1), "Task has incorrect label");
+        final List<Task> tasks4 = fromJson(response4.getContentAsString(), new TypeReference<>() { });
+        assertEquals(1, tasks4.size(), "Collection has incorrect size");
+        assertTrue(tasks4.get(0).getLabels().contains(label1), "Task has incorrect label");
     }
 
 

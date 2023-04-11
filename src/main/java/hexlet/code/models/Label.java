@@ -44,11 +44,4 @@ public class Label extends BaseModel {
     public String toString() {
         return getName();
     }
-
-//    @ManyToMany
-//    private List<Task> tasks;
-//
-//    public Label(String name) {
-//        this.name = name;
-//    }
 }

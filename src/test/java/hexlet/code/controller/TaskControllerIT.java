@@ -165,13 +165,72 @@ public class TaskControllerIT {
         var response = utils.perform(get(TASK_CONTROLLER))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
-
-        final List<Task> tasks = fromJson(
-                response.getContentAsString(), new TypeReference<>() { }
-        );
+        final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertEquals(newTaskCount, tasks.size());
     }
+
+    @Test
+    public void getTasksByParams() throws Exception {
+        var user_1 = utils.getUserByEmail(TEST_USERNAME);
+        var user_2 = utils.getUserByEmail(EXECUTOR_USERNAME);
+        var taskStatus_1 = statusService.createNewStatus(new TaskStatusDto("Status 1"));
+        var taskStatus_2 = statusService.createNewStatus(new TaskStatusDto("Status 2"));
+
+        var labels_1 = new HashSet<Label>();
+        var labels_2 = new HashSet<Label>();
+        var label_1 = labelService.createLabel(new LabelDto("Label 1"));
+        var label_2 = labelService.createLabel(new LabelDto("Label 2"));
+        var label_3 = labelService.createLabel(new LabelDto("Label 3"));
+        labels_1.add(label_1);
+        labels_2.add(label_2);
+        labels_2.add(label_3);
+
+        taskRepository.save(new Task("Task 1", "Descr", taskStatus_1, labels_1, user_1, user_2));
+        taskRepository.save(new Task("Task 2", "Descr", taskStatus_2, labels_2, user_2, user_1));
+        taskRepository.save(new Task("Task 3", "Descr", taskStatus_2, labels_2, user_2, user_2));
+
+        // check param: 'taskStatusId'
+        final long expectedTaskStatusId = 2;
+        var request_1 = get(TASK_CONTROLLER)
+                .param("taskStatusId", String.valueOf(expectedTaskStatusId));
+        var response_1 = utils.perform(request_1).andExpect(status().isOk()).andReturn().getResponse();
+        final List<Task> tasks_1 = fromJson(response_1.getContentAsString(), new TypeReference<>() { });
+        assertEquals(2, tasks_1.size(), "Collection has incorrect size");
+        assertEquals(expectedTaskStatusId, tasks_1.get(0).getTaskStatus().getId(),"Task has incorrect task status");
+
+        // check param: 'authorId'
+        final long expectedAuthorId = 1;
+        var request_2 = get(TASK_CONTROLLER)
+                .param("authorId", String.valueOf(expectedAuthorId));
+        var response_2 = utils.perform(request_2)
+                .andExpect(status().isOk()).andReturn().getResponse();
+        final List<Task> tasks_2 = fromJson(response_2.getContentAsString(), new TypeReference<>() { });
+        assertEquals(1, tasks_2.size(), "Collection has incorrect size");
+        assertEquals(expectedAuthorId, tasks_2.get(0).getAuthor().getId(), "Task has incorrect author");
+
+        // check param: 'executorId'
+        var expectedExecutorId = 2;
+        var request_3 = get(TASK_CONTROLLER)
+                .param("executorId", String.valueOf(expectedExecutorId));
+        var response_3 = utils.perform(request_3)
+                .andExpect(status().isOk()).andReturn().getResponse();
+        final List<Task> tasks_3 = fromJson(response_3.getContentAsString(), new TypeReference<>() { });
+        assertEquals(2, tasks_3.size(), "Collection has incorrect size");
+        assertEquals(expectedExecutorId, tasks_3.get(0).getExecutor().getId(), "Task has incorrect executor");
+        assertEquals(expectedExecutorId, tasks_3.get(1).getExecutor().getId(), "Task has incorrect executor");
+
+        // check param: 'labels'
+        var expectedLabelId = 1;
+        var request_4 = get(TASK_CONTROLLER)
+                .param("labels", String.valueOf(expectedLabelId));
+        var response_4 = utils.perform(request_4)
+                .andExpect(status().isOk()).andReturn().getResponse();
+        final List<Task> tasks_4 = fromJson(response_4.getContentAsString(), new TypeReference<>() { });
+        assertEquals(1, tasks_4.size(), "Collection has incorrect size");
+        assertTrue(tasks_4.get(0).getLabels().contains(label_1), "Task has incorrect label");
+    }
+
 
     @Test
     public void getTaskById() throws Exception {
@@ -312,7 +371,7 @@ public class TaskControllerIT {
         assertEquals(oldTask.getExecutor(), task.getExecutor());
     }
 
-    @Disabled
+
     @Test
     public void deleteTask() throws Exception {
         var task = createDefaultTask();
@@ -325,7 +384,6 @@ public class TaskControllerIT {
         assertEquals(0, taskRepository.count());
     }
 
-    @Disabled
     @Test
     public void deleteTaskFails() throws Exception {
         var task = createDefaultTask();

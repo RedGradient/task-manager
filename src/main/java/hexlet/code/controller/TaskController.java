@@ -1,7 +1,7 @@
 package hexlet.code.controller;
 
 
-//import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Predicate;
 import hexlet.code.dto.TaskDto;
 import hexlet.code.models.Task;
 import hexlet.code.service.TaskService;
@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 
-//import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,9 +32,8 @@ public class TaskController {
 
     private static final String AUTHENTICATED = "isAuthenticated()";
     private static final String ONLY_OWNER_BY_ID = """
-        @userRepository.findById(#id).get().getEmail() == authentication.name
-        """;
-
+        @taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.name
+    """;
 
     @Autowired
     private TaskService taskService;
@@ -42,15 +41,12 @@ public class TaskController {
     @Operation(summary = "Get list of all tasks")
     @ApiResponse(responseCode = "200", description = "List of all tasks")
     @GetMapping
-    public Iterable<Task> getAllTasks() {
-//        @QuerydslPredicate(root = Task.class) Predicate predicate
-//        if (predicate != null) {
-//            return taskService.getTasks(predicate);
-//        } else {
-//            return taskService.getTasks();
-//        }
-
-        return taskService.getTasks();
+    public Iterable<Task> getAllTasks(@QuerydslPredicate(root = Task.class) Predicate predicate) {
+        if (predicate != null) {
+            return taskService.getTasks(predicate);
+        } else {
+            return taskService.getTasks();
+        }
     }
 
     @Operation(summary = "Get task by id")
@@ -77,7 +73,7 @@ public class TaskController {
         @ApiResponse(responseCode = "200", description = "Task updated"),
         @ApiResponse(responseCode = "404", description = "Task with that id not found")
     })
-    @PreAuthorize(AUTHENTICATED)
+    @PreAuthorize(ONLY_OWNER_BY_ID)
     @PutMapping(ID)
     public Task updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
         return taskService.udpateTask(id, taskDto);

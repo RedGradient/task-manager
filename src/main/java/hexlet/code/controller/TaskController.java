@@ -34,7 +34,7 @@ public class TaskController {
     private static final String AUTHENTICATED = "isAuthenticated()";
     private static final String ONLY_OWNER_BY_ID = """
         @taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.name
-    """;
+        """;
 
     @Autowired
     private TaskService taskService;

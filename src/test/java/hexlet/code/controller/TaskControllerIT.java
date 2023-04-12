@@ -19,11 +19,7 @@ import hexlet.code.service.TaskService;
 import hexlet.code.service.TaskStatusService;
 import hexlet.code.service.UserService;
 import hexlet.code.utils.TestUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -190,7 +186,7 @@ public class TaskControllerIT {
         taskRepository.save(new Task("Task 3", "Descr", taskStatus2, labels2, user2, user2));
 
         // check param: 'taskStatusId'
-        final long expectedTaskStatusId = 2;
+        final long expectedTaskStatusId = statusRepository.findByName(taskStatus2.getName()).get().getId();
         var request1 = get(TASK_CONTROLLER)
                 .param("taskStatusId", String.valueOf(expectedTaskStatusId));
         var response1 = utils.perform(request1).andExpect(status().isOk()).andReturn().getResponse();
@@ -199,7 +195,7 @@ public class TaskControllerIT {
         assertEquals(expectedTaskStatusId, tasks1.get(0).getTaskStatus().getId(), "Task has incorrect task status");
 
         // check param: 'authorId'
-        final long expectedAuthorId = 1;
+        final long expectedAuthorId = utils.getUserByEmail(TEST_USERNAME).getId();
         var request2 = get(TASK_CONTROLLER)
                 .param("authorId", String.valueOf(expectedAuthorId));
         var response2 = utils.perform(request2)
@@ -209,7 +205,7 @@ public class TaskControllerIT {
         assertEquals(expectedAuthorId, tasks2.get(0).getAuthor().getId(), "Task has incorrect author");
 
         // check param: 'executorId'
-        var expectedExecutorId = 2;
+        var expectedExecutorId = utils.getUserByEmail(EXECUTOR_USERNAME).getId();
         var request3 = get(TASK_CONTROLLER)
                 .param("executorId", String.valueOf(expectedExecutorId));
         var response3 = utils.perform(request3)
@@ -220,7 +216,7 @@ public class TaskControllerIT {
         assertEquals(expectedExecutorId, tasks3.get(1).getExecutor().getId(), "Task has incorrect executor");
 
         // check param: 'labels'
-        var expectedLabelId = 1;
+        var expectedLabelId = labelRepository.findByName(label1.getName()).get().getId();
         var request4 = get(TASK_CONTROLLER)
                 .param("labels", String.valueOf(expectedLabelId));
         var response4 = utils.perform(request4)

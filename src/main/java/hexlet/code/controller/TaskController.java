@@ -6,6 +6,7 @@ import hexlet.code.dto.TaskDto;
 import hexlet.code.models.Task;
 import hexlet.code.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class TaskController {
         @ApiResponse(responseCode = "404", description = "Task with that id not found")
     })
     @GetMapping(ID)
-    public Task getTaskById(@PathVariable Long id) {
+    public Task getTaskById(@Parameter(description = "id of task to be searched") @PathVariable Long id) {
         return taskService.getTaskById(id);
     }
 
@@ -75,7 +76,8 @@ public class TaskController {
     })
     @PreAuthorize(ONLY_OWNER_BY_ID)
     @PutMapping(ID)
-    public Task updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+    public Task updateTask(@Parameter(description = "id of task to be updated") @PathVariable Long id,
+                           @RequestBody TaskDto taskDto) {
         return taskService.udpateTask(id, taskDto);
     }
 
@@ -86,7 +88,7 @@ public class TaskController {
     })
     @PreAuthorize(ONLY_OWNER_BY_ID)
     @DeleteMapping(ID)
-    public void deleteTask(@PathVariable Long id) {
+    public void deleteTask(@Parameter(description = "id of task to be deleted") @PathVariable Long id) {
         taskService.deleteTaskById(id);
     }
 

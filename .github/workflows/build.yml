@@ -20,6 +20,8 @@ jobs:
           java-version: '17'
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
+        env:
+          ROLLBAR_TOKEN: ${{secrets.ROLLBAR_TOKEN}}
         with:
           arguments: build
           build-root-directory: ./

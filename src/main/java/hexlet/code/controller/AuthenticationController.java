@@ -20,9 +20,9 @@ public class AuthenticationController {
     private AuthenticationService service;
 
     @PostMapping("/api/login")
-    public ResponseEntity<AuthenticationResponse> createAuthToken(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<?> createAuthToken(@RequestBody AuthenticationRequest request) {
         try {
-            return ResponseEntity.ok(service.authenticate(request));
+            return service.authenticate(request);
         } catch (Exception e) {
             throw new BadCredentialsException();
         }

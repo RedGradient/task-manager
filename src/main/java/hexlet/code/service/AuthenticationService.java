@@ -2,7 +2,6 @@ package hexlet.code.service;
 
 import hexlet.code.component.JwtHelper;
 import hexlet.code.dto.AuthenticationRequest;
-import hexlet.code.dto.AuthenticationResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

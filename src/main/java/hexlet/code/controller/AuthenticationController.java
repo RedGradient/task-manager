@@ -2,7 +2,6 @@ package hexlet.code.controller;
 
 import hexlet.code.exceptions.BadCredentialsException;
 import hexlet.code.dto.AuthenticationRequest;
-import hexlet.code.dto.AuthenticationResponse;
 import hexlet.code.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

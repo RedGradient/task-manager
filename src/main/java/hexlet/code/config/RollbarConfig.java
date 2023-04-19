@@ -10,9 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-// , "com.rollbar.spring"
 @Configuration
-@ComponentScan({"hexlet.code"})
+@ComponentScan({"hexlet.code", "com.rollbar.spring"})
 public class RollbarConfig {
 
     @Value("${rollbar-token:}")

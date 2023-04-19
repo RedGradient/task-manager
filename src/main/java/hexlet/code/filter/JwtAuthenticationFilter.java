@@ -40,7 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         boolean isAuthHeaderValid = (authHeader != null && authHeader.startsWith(BEARER));
         if (isAuthHeaderValid) {
             jwt = authHeader.substring(7);
-            System.out.println(jwt);
             username = jwtHelper.extractUsername(jwt);
         }
 

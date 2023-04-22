@@ -28,7 +28,6 @@ import static hexlet.code.utils.TestUtils.TEST_USERNAME;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME_2;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.config.security.SecurityConfiguration.LOGIN;
-import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -52,14 +51,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
 public class UserControllerIT {
 
+    private static final String USER_CONTROLLER_PATH = "/api/users";
     @Autowired
-    private UserController controller;
+    private UserController userController;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private TestUtils utils;
-
-
     @AfterEach
     public void clear() {
         utils.tearDown();
@@ -68,7 +66,7 @@ public class UserControllerIT {
 
     @Test
     public void contextLoads() {
-        assertNotNull(controller);
+        assertNotNull(userController);
     }
 
     @Test

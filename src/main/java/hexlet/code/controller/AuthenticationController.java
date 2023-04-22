@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static hexlet.code.controller.AuthenticationController.AUTH_CONTROLLER_PATH;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("${base-url}" + AUTH_CONTROLLER_PATH)
 public class AuthenticationController {
 
+    public static final String AUTH_CONTROLLER_PATH = "/login";
     @Autowired
     private AuthenticationService service;
 

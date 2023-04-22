@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import static hexlet.code.controller.TaskStatusController.TASK_STATUS_CONTROLLER_PATH;
+
 
 @RestController
-@RequestMapping("/api/statuses")
+@RequestMapping("${base-url}" + TASK_STATUS_CONTROLLER_PATH)
 public class TaskStatusController {
-
+    public static final String TASK_STATUS_CONTROLLER_PATH = "/statuses";
     private static final String ID = "/{id}";
     private static final String AUTHENTICATED = "isAuthenticated()";
 

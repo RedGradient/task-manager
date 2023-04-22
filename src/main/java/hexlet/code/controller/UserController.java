@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
+
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("${base-url}" + USER_CONTROLLER_PATH)
 public class UserController {
 
     public static final String ID = "/{id}";
-    public static final String USER_CONTROLLER_PATH = "/api/users";
+    public static final String USER_CONTROLLER_PATH = "/users";
     private static final String ONLY_OWNER_BY_ID = """
         @userRepository.findById(#id).get().getEmail() == authentication.name
         """;

@@ -20,12 +20,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Component
 public class TestUtils {
 
+    private static final String USER_CONTROLLER_PATH = "/api/users";
     public static final String TEST_USERNAME = "email@email.com";
     public static final String TEST_USERNAME_2 = "email2@email.com";
     private static final String AUTHORIZATION = "AUTHORIZATION";

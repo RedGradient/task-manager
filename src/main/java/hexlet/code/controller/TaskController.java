@@ -26,11 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
+
 
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("${base-url}" + TASK_CONTROLLER_PATH)
 public class TaskController {
-    public static final String TASK_CONTROLLER = "/api/tasks";
+    public static final String TASK_CONTROLLER_PATH = "/tasks";
     public static final String ID = "/{id}";
 
     private static final String AUTHENTICATED = "isAuthenticated()";

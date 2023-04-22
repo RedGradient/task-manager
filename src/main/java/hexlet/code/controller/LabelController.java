@@ -5,6 +5,8 @@ import hexlet.code.dto.LabelDto;
 import hexlet.code.models.Label;
 import hexlet.code.service.LabelService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class LabelController {
 
     private static final String ID = "/{id}";
-
     private static final String AUTHENTICATED = "isAuthenticated()";
 
     @Autowired
@@ -33,8 +34,8 @@ public class LabelController {
 
 
     @Operation(summary = "Get list of all labels")
-    @ApiResponse(responseCode = "200", description = "List of all labels")
-//    @PreAuthorize(AUTHENTICATED)
+    @ApiResponse(responseCode = "200", description = "List of all labels",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Label.class)))
     @GetMapping
     public Iterable<Label> getAllLabels() {
         return labelService.getAllLabels();
@@ -42,8 +43,9 @@ public class LabelController {
 
     @Operation(summary = "Get label by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Label found"),
-        @ApiResponse(responseCode = "404", description = "Label with that id not found")
+        @ApiResponse(responseCode = "200", description = "Label found",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Label.class))),
+        @ApiResponse(responseCode = "404", description = "Label with that id not found", content = @Content)
     })
     @PreAuthorize(AUTHENTICATED)
     @GetMapping(ID)
@@ -52,7 +54,8 @@ public class LabelController {
     }
 
     @Operation(summary = "Create label")
-    @ApiResponse(responseCode = "201", description = "Label created")
+    @ApiResponse(responseCode = "201", description = "Label created",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Label.class)))
     @PostMapping
     @PreAuthorize(AUTHENTICATED)
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,8 +65,9 @@ public class LabelController {
 
     @Operation(summary = "Update label by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Label updated"),
-        @ApiResponse(responseCode = "404", description = "Label with that id not found")
+        @ApiResponse(responseCode = "200", description = "Label updated",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Label.class))),
+        @ApiResponse(responseCode = "404", description = "Label with that id not found", content = @Content)
     })
     @PreAuthorize(AUTHENTICATED)
     @PutMapping(ID)
@@ -73,8 +77,8 @@ public class LabelController {
 
     @Operation(description = "Delete label by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Label deleted"),
-        @ApiResponse(responseCode = "404", description = "Label with that id not found")
+        @ApiResponse(responseCode = "200", description = "Label deleted", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Label with that id not found", content = @Content)
     })
     @PreAuthorize(AUTHENTICATED)
     @DeleteMapping(ID)

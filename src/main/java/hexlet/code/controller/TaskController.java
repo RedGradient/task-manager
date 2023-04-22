@@ -7,6 +7,8 @@ import hexlet.code.models.Task;
 import hexlet.code.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,8 @@ public class TaskController {
     private TaskService taskService;
 
     @Operation(summary = "Get list of all tasks")
-    @ApiResponse(responseCode = "200", description = "List of all tasks")
+    @ApiResponse(responseCode = "200", description = "List of all tasks",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Task.class)))
     @GetMapping
     public Iterable<Task> getAllTasks(@QuerydslPredicate(root = Task.class) Predicate predicate) {
         if (predicate != null) {
@@ -52,8 +55,9 @@ public class TaskController {
 
     @Operation(summary = "Get task by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Task found"),
-        @ApiResponse(responseCode = "404", description = "Task with that id not found")
+        @ApiResponse(responseCode = "200", description = "Task found",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Task.class))),
+        @ApiResponse(responseCode = "404", description = "Task with that id not found", content = @Content)
     })
     @GetMapping(ID)
     public Task getTaskById(@Parameter(description = "id of task to be searched") @PathVariable Long id) {
@@ -61,7 +65,8 @@ public class TaskController {
     }
 
     @Operation(summary = "Create task")
-    @ApiResponse(responseCode = "201", description = "Task created")
+    @ApiResponse(responseCode = "201", description = "Task created",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Task.class)))
     @PreAuthorize(AUTHENTICATED)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -71,7 +76,8 @@ public class TaskController {
 
     @Operation(summary = "Update task by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Task updated"),
+        @ApiResponse(responseCode = "200", description = "Task updated",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Task.class))),
         @ApiResponse(responseCode = "404", description = "Task with that id not found")
     })
     @PreAuthorize(ONLY_OWNER_BY_ID)
@@ -83,8 +89,8 @@ public class TaskController {
 
     @Operation(description = "Delete task by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Task deleted"),
-        @ApiResponse(responseCode = "404", description = "Task with that id not found")
+        @ApiResponse(responseCode = "200", description = "Task deleted", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Task with that id not found", content = @Content)
     })
     @PreAuthorize(ONLY_OWNER_BY_ID)
     @DeleteMapping(ID)

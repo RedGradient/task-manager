@@ -6,6 +6,8 @@ import hexlet.code.dto.UserDto;
 import hexlet.code.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -37,16 +39,18 @@ public class UserController {
     private UserService userService;
 
     @Operation(summary = "Get list of all users")
-    @ApiResponse(responseCode = "200", description = "List of all users")
-    @GetMapping(path = "")
-    public Iterable<User> getUsers() {
+    @ApiResponse(responseCode = "200", description = "List of all users",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)))
+    @GetMapping
+    public Iterable<User> getAllUsers() {
         return userService.getUsers();
     }
 
     @Operation(summary = "Get specific user by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "User found"),
-        @ApiResponse(responseCode = "404", description = "User with that id not found")
+        @ApiResponse(responseCode = "200", description = "User found",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "404", description = "User with that id not found", content = @Content)
     })
     @GetMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
@@ -55,8 +59,9 @@ public class UserController {
     }
 
     @Operation(summary = "Create user")
-    @ApiResponse(responseCode = "201", description = "User created")
-    @PostMapping(path = "")
+    @ApiResponse(responseCode = "201", description = "User created",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)))
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody UserDto newUser) {
         try {
@@ -69,7 +74,7 @@ public class UserController {
     @Operation(description = "Delete user by id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "User deleted"),
-        @ApiResponse(responseCode = "404", description = "User with that id not found")
+        @ApiResponse(responseCode = "404", description = "User with that id not found", content = @Content)
     })
     @PreAuthorize(ONLY_OWNER_BY_ID)
     @DeleteMapping(ID)

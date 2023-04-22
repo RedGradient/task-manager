@@ -5,6 +5,8 @@ import hexlet.code.models.TaskStatus;
 import hexlet.code.service.TaskStatusService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +35,18 @@ public class TaskStatusController {
     private TaskStatusService statusService;
 
     @Operation(summary = "Get list of all statuses")
-    @ApiResponse(responseCode = "200", description = "List of all statuses")
+    @ApiResponse(responseCode = "200", description = "List of all statuses",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = TaskStatus.class)))
     @GetMapping
-    public Iterable<TaskStatus> getStatuses() {
+    public Iterable<TaskStatus> getAllStatuses() {
         return statusService.getStatuses();
     }
 
     @Operation(summary = "Get specific status by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Status found"),
-        @ApiResponse(responseCode = "404", description = "Status with that id not found")
+        @ApiResponse(responseCode = "200", description = "Status found",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TaskStatus.class))),
+        @ApiResponse(responseCode = "404", description = "Status with that id not found", content = @Content)
     })
     @GetMapping(ID)
     public TaskStatus getStatusById(@PathVariable Long id) {
@@ -50,7 +54,8 @@ public class TaskStatusController {
     }
 
     @Operation(summary = "Create status")
-    @ApiResponse(responseCode = "201", description = "Status created")
+    @ApiResponse(responseCode = "201", description = "Status created",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = TaskStatus.class)))
     @PreAuthorize(AUTHENTICATED)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -60,8 +65,9 @@ public class TaskStatusController {
 
     @Operation(summary = "Update status by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Status updated"),
-        @ApiResponse(responseCode = "404", description = "Status with that id not found")
+        @ApiResponse(responseCode = "200", description = "Status updated",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TaskStatus.class))),
+        @ApiResponse(responseCode = "404", description = "Status with that id not found", content = @Content)
     })
     @PreAuthorize(AUTHENTICATED)
     @PutMapping(ID)
@@ -71,8 +77,8 @@ public class TaskStatusController {
 
     @Operation(description = "Delete status by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Status deleted"),
-        @ApiResponse(responseCode = "404", description = "Status with that id not found")
+        @ApiResponse(responseCode = "200", description = "Status deleted", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Status with that id not found", content = @Content)
     })
     @PreAuthorize(AUTHENTICATED)
     @DeleteMapping(ID)

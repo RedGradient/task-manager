@@ -90,7 +90,7 @@ dependencies {
         'io.jsonwebtoken:jjwt-jackson:0.11.5',
 
         // springdoc
-        'org.springdoc:springdoc-openapi-ui:1.7.0',
+        'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3',
     )
 
     compileOnly 'org.projectlombok:lombok:1.18.26'
@@ -110,10 +110,6 @@ dependencies {
         'org.liquibase.ext:liquibase-hibernate6:4.19.0',
         'org.springframework.boot:spring-boot-starter-data-jpa',
     )
-}
-
-openApi {
-    apiDocsUrl.set("http://localhost:5001/v3/api-docs")
 }
 
 test {

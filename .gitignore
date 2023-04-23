@@ -39,3 +39,4 @@ out/
 
 .DS_Store
 /database-dev.trace.db
+/database-dev.mv.db

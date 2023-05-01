@@ -1,8 +1,8 @@
 package hexlet.code.controller;
 
+import hexlet.code.dto.security.AuthenticationRequest;
 import hexlet.code.dto.UserDto;
 import hexlet.code.models.User;
-import hexlet.code.dto.LoginDto;
 import hexlet.code.utils.TestUtils;
 import hexlet.code.config.SpringConfigForIT;
 import hexlet.code.repositories.UserRepository;
@@ -53,8 +53,6 @@ public class UserControllerIT {
 
     private static final String USER_CONTROLLER_PATH = "/api/users";
     @Autowired
-    private UserController userController;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private TestUtils utils;
@@ -63,11 +61,6 @@ public class UserControllerIT {
         utils.tearDown();
     }
 
-
-    @Test
-    public void contextLoads() {
-        assertNotNull(userController);
-    }
 
     @Test
     public void registration() throws Exception {
@@ -79,7 +72,7 @@ public class UserControllerIT {
     @Test
     public void getUserById() throws Exception {
         utils.regDefaultUser();
-        final User expectedUser = userRepository.findAll().get(0);
+        final User expectedUser = userRepository.findAll().iterator().next();
         final var response = utils.perform(
                         get(USER_CONTROLLER_PATH + ID, expectedUser.getId()),
                         expectedUser.getEmail()
@@ -99,7 +92,7 @@ public class UserControllerIT {
     @Test
     public void getUserByIdFails() throws Exception {
         utils.regDefaultUser();
-        final User expectedUser = userRepository.findAll().get(0);
+        final User expectedUser = userRepository.findAll().iterator().next();
         utils.perform(get(USER_CONTROLLER_PATH + ID, expectedUser.getId()))
                 .andExpect(status().isForbidden());
     }
@@ -131,7 +124,7 @@ public class UserControllerIT {
     @Test
     public void login() throws Exception {
         utils.regDefaultUser();
-        final LoginDto loginDto = new LoginDto(
+        final AuthenticationRequest loginDto = new AuthenticationRequest(
                 utils.getTestRegistrationDto().getEmail(),
                 utils.getTestRegistrationDto().getPassword()
         );
@@ -141,7 +134,7 @@ public class UserControllerIT {
 
     @Test
     public void loginFail() throws Exception {
-        final LoginDto loginDto = new LoginDto(
+        final AuthenticationRequest loginDto = new AuthenticationRequest(
                 utils.getTestRegistrationDto().getEmail(),
                 utils.getTestRegistrationDto().getPassword()
         );

@@ -14,11 +14,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskDto {
-    @NotNull
     @NotBlank
     private String name;
     private String description;
-    @NotNull
     @NotBlank
     private Long taskStatusId;
     private Set<Long> labelIds;

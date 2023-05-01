@@ -48,8 +48,6 @@ public class TaskStatusControllerIT {
     private static final String ID = "/{id}";
 
     @Autowired
-    private TaskStatusController controller;
-    @Autowired
     private TaskStatusRepository statusRepository;
     @Autowired
     private UserRepository userRepository;
@@ -62,11 +60,6 @@ public class TaskStatusControllerIT {
         utils.tearDown();
     }
 
-
-    @Test
-    public void contextLoads() {
-        assertNotNull(controller);
-    }
 
     @Test
     public void getStatuses() throws Exception {

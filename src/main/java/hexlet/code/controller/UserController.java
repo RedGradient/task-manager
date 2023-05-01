@@ -66,11 +66,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody UserDto newUser) {
-        try {
-            return userService.createNewUser(newUser);
-        } catch (Exception e) {
-            throw new UserAlreadyExistsException(newUser.getEmail());
-        }
+        return userService.createNewUser(newUser);
     }
 
     @Operation(description = "Delete user by id")

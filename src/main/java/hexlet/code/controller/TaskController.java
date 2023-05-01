@@ -48,11 +48,7 @@ public class TaskController {
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = Task.class)))
     @GetMapping
     public Iterable<Task> getAllTasks(@QuerydslPredicate(root = Task.class) Predicate predicate) {
-        if (predicate != null) {
-            return taskService.getTasks(predicate);
-        } else {
-            return taskService.getTasks();
-        }
+        return taskService.getTasks(predicate);
     }
 
     @Operation(summary = "Get task by id")

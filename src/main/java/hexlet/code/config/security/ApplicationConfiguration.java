@@ -1,7 +1,7 @@
 package hexlet.code.config.security;
 
 import hexlet.code.models.User;
-import hexlet.code.models.UserDetailsImpl;
+import hexlet.code.models.security.UserDetailsImpl;
 import hexlet.code.repositories.UserRepository;
 
 import org.springframework.context.annotation.Bean;

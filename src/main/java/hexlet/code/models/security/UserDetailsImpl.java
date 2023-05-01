@@ -1,6 +1,7 @@
-package hexlet.code.models;
+package hexlet.code.models.security;
 
 import hexlet.code.enums.Role;
+import hexlet.code.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

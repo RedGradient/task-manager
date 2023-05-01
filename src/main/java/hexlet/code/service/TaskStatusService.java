@@ -31,7 +31,7 @@ public class TaskStatusService {
     }
 
     public TaskStatus updateStatus(Long id, TaskStatusDto statusDto) {
-        final TaskStatus statusToUpdate = repository.findById(id).get();
+        final TaskStatus statusToUpdate = getStatusById(id);
         statusToUpdate.setName(statusDto.getName());
         return repository.save(statusToUpdate);
     }

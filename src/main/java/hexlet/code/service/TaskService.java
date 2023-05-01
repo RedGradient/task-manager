@@ -40,6 +40,9 @@ public class TaskService {
     }
 
     public Iterable<Task> getTasks(Predicate predicate) {
+        if (predicate == null) {
+            return taskRepository.findAll();
+        }
         return taskRepository.findAll(predicate);
     }
 

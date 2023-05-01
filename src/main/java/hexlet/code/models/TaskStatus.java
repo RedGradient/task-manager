@@ -19,7 +19,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskStatus extends BaseModel {
-    @NotNull
     @NotBlank
     @Column(unique = true)
     private String name;

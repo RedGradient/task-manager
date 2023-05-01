@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LabelDto {
-    @NotNull
     @NotBlank
     private String name;
 }

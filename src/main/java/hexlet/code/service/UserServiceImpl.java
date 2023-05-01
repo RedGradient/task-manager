@@ -1,10 +1,11 @@
 package hexlet.code.service;
 
+import hexlet.code.exceptions.UserAlreadyExistsException;
 import hexlet.code.exceptions.UserNotFoundException;
 import hexlet.code.dto.UserDto;
 import hexlet.code.enums.Role;
 import hexlet.code.models.User;
-import hexlet.code.models.UserDetailsImpl;
+import hexlet.code.models.security.UserDetailsImpl;
 import hexlet.code.repositories.UserRepository;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User createNewUser(final UserDto userDto) {
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            throw new UserAlreadyExistsException(userDto.getEmail());
+        }
         final User user = new User();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
@@ -58,9 +62,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User getUserById(Long id) {
-        if (id == null) {
-            return null;
-        }
         return userRepository.findById(id).orElseThrow(
                 () -> new UserNotFoundException(id)
         );

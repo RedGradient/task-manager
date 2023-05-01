@@ -7,7 +7,9 @@ import hexlet.code.repositories.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class LabelService {
@@ -26,8 +28,12 @@ public class LabelService {
         );
     }
 
-    public List<Label> getAllLabels() {
-        return (List<Label>) labelRepository.findAll();
+    public Set<Label> getAllLabels() {
+        var labels = new HashSet<Label>();
+        for (var label : labelRepository.findAll()) {
+            labels.add(label);
+        }
+        return labels;
     }
 
     public Label updateLabel(long id, LabelDto labelDto) {

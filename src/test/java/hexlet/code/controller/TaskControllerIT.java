@@ -66,8 +66,6 @@ public class TaskControllerIT {
 
 
     @Autowired
-    private TaskController controller;
-    @Autowired
     private TaskService taskService;
     @Autowired
     private TaskRepository taskRepository;
@@ -107,11 +105,6 @@ public class TaskControllerIT {
         statusRepository.deleteAll();
         labelRepository.deleteAll();
         userRepository.deleteAll();
-    }
-
-    @Test
-    public void contextLoads() {
-        assertNotNull(controller);
     }
 
     @Test

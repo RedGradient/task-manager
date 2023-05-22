@@ -115,7 +115,7 @@ test {
     useJUnitPlatform()
 }
 
-diffChangeLog {
+diffChangelog {
     dependsOn compileJava
 }
 

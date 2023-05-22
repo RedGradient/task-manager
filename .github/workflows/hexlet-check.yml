@@ -20,5 +20,7 @@ jobs:
 
       - name: Hexlet project check
         uses: hexlet/project-action@release
+        env:
+          JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
         with:
           hexlet-id: ${{ secrets.HEXLET_ID }}

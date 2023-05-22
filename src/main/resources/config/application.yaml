@@ -7,7 +7,7 @@ rollbar-token: ${ROLLBAR_TOKEN}
 
 jwt:
   token:
-    secret: ${JWT_TOKEN}
+    secret: "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4NDc4NDc1OSwiaWF0IjoxNjg0Nzg0NzU5fQ.Llf5dxlq-cfJaB9heyS2iVdN1YO7_Om0g5RwZrS7o_8"
 
 spring:
   profiles:

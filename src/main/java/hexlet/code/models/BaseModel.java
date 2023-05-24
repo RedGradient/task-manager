@@ -19,13 +19,13 @@ import java.util.Date;
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseModel {
+public abstract class BaseModel {
     @Id
     @GeneratedValue(strategy = AUTO)
-    public Long id;
+    private Long id;
 
     @CreationTimestamp
     @Temporal(TIMESTAMP)
-    public Date createdAt;
+    private Date createdAt;
 
 }

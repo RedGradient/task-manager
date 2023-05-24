@@ -22,10 +22,10 @@ import java.util.Date;
 public class BaseModel {
     @Id
     @GeneratedValue(strategy = AUTO)
-    protected Long id;
+    public Long id;
 
     @CreationTimestamp
     @Temporal(TIMESTAMP)
-    protected Date createdAt;
+    public Date createdAt;
 
 }

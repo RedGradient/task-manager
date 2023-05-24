@@ -51,7 +51,7 @@ public class User extends BaseModel {
     private boolean active = true;
 
     public User(final Long id) {
-        this.id = id;
+        setId(id);
     }
 
     @Override

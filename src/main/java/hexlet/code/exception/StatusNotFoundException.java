@@ -1,4 +1,4 @@
-package hexlet.code.exceptions;
+package hexlet.code.exception;
 
 
 import org.springframework.http.HttpStatus;

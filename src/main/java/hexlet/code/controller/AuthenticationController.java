@@ -1,6 +1,6 @@
 package hexlet.code.controller;
 
-import hexlet.code.exceptions.BadCredentialsException;
+import hexlet.code.exception.BadCredentialsException;
 import hexlet.code.dto.security.AuthenticationRequest;
 import hexlet.code.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;

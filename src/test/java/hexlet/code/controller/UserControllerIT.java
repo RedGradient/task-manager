@@ -2,10 +2,10 @@ package hexlet.code.controller;
 
 import hexlet.code.dto.security.AuthenticationRequest;
 import hexlet.code.dto.UserDto;
-import hexlet.code.models.User;
+import hexlet.code.model.User;
 import hexlet.code.utils.TestUtils;
 import hexlet.code.config.SpringConfigForIT;
-import hexlet.code.repositories.UserRepository;
+import hexlet.code.repository.UserRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -72,7 +72,7 @@ public class UserControllerIT {
     @Test
     public void getUserById() throws Exception {
         utils.regDefaultUser();
-        final User expectedUser = userRepository.findAll().iterator().next();
+        final User expectedUser = userRepository.findByEmail(TEST_USERNAME).orElseThrow();
         final var response = utils.perform(
                         get(USER_CONTROLLER_PATH + ID, expectedUser.getId()),
                         expectedUser.getEmail()
@@ -92,7 +92,7 @@ public class UserControllerIT {
     @Test
     public void getUserByIdFails() throws Exception {
         utils.regDefaultUser();
-        final User expectedUser = userRepository.findAll().iterator().next();
+        final User expectedUser = userRepository.findByEmail(TEST_USERNAME).orElseThrow();
         utils.perform(get(USER_CONTROLLER_PATH + ID, expectedUser.getId()))
                 .andExpect(status().isForbidden());
     }
@@ -109,6 +109,7 @@ public class UserControllerIT {
                 response.getContentAsString(), new TypeReference<>() { }
         );
 
+        assertNotNull(users);
         assertEquals(1, users.size());
     }
 
@@ -146,7 +147,7 @@ public class UserControllerIT {
     public void updateUser() throws Exception {
         utils.regDefaultUser();
 
-        final Long userId = userRepository.findByEmail(TEST_USERNAME).get().getId();
+        final Long userId = userRepository.findByEmail(TEST_USERNAME).orElseThrow().getId();
 
         final var userDto = new UserDto(TEST_USERNAME_2, "new name", "new last name", "new pwd");
 

@@ -1,8 +1,8 @@
 package hexlet.code.config.security;
 
-import hexlet.code.models.User;
-import hexlet.code.models.security.UserDetailsImpl;
-import hexlet.code.repositories.UserRepository;
+import hexlet.code.model.User;
+import hexlet.code.model.security.UserDetailsImpl;
+import hexlet.code.repository.UserRepository;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

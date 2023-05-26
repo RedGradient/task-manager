@@ -1,7 +1,7 @@
-package hexlet.code.models;
+package hexlet.code.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hexlet.code.enums.Role;
+import hexlet.code.enumeration.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,16 +31,14 @@ public class User extends BaseModel {
     private String email;
 
     @NotBlank
-    @Size(min = 1)
     private String firstName;
 
     @NotBlank
-    @Size(min = 1)
     private String lastName;
 
     @NotBlank
     @JsonIgnore
-    @Size(min = 8)
+    @Size(min = 3)
     private String password;
 
     @JsonIgnore
@@ -59,10 +57,10 @@ public class User extends BaseModel {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof User anotherUser)) {
+        if (!(o instanceof User)) {
             return false;
         }
-        return Objects.equals(getEmail(), anotherUser.getEmail());
+        return Objects.equals(getEmail(), ((User) o).getEmail());
     }
 
     @Override

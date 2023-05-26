@@ -1,12 +1,12 @@
 package hexlet.code.service;
 
-import hexlet.code.exceptions.UserAlreadyExistsException;
-import hexlet.code.exceptions.UserNotFoundException;
+import hexlet.code.exception.UserAlreadyExistsException;
+import hexlet.code.exception.UserNotFoundException;
 import hexlet.code.dto.UserDto;
-import hexlet.code.enums.Role;
-import hexlet.code.models.User;
-import hexlet.code.models.security.UserDetailsImpl;
-import hexlet.code.repositories.UserRepository;
+import hexlet.code.enumeration.Role;
+import hexlet.code.model.User;
+import hexlet.code.model.security.UserDetailsImpl;
+import hexlet.code.repository.UserRepository;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

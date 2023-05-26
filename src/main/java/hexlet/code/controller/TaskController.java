@@ -3,7 +3,7 @@ package hexlet.code.controller;
 
 import com.querydsl.core.types.Predicate;
 import hexlet.code.dto.TaskDto;
-import hexlet.code.models.Task;
+import hexlet.code.model.Task;
 import hexlet.code.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

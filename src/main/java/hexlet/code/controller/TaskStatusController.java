@@ -1,7 +1,7 @@
 package hexlet.code.controller;
 
 import hexlet.code.dto.TaskStatusDto;
-import hexlet.code.models.TaskStatus;
+import hexlet.code.model.TaskStatus;
 import hexlet.code.service.TaskStatusService;
 
 import io.swagger.v3.oas.annotations.Operation;

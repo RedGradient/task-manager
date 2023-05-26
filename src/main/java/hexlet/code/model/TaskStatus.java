@@ -1,4 +1,4 @@
-package hexlet.code.models;
+package hexlet.code.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,32 +14,32 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "labels")
+@Table(name = "statuses")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Label extends BaseModel {
+public class TaskStatus extends BaseModel {
     @NotBlank
     @Column(unique = true)
     private String name;
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Label anotherLabel)) {
+        if (!(o instanceof TaskStatus that)) {
             return false;
         }
-        return Objects.equals(getName(), anotherLabel.getName());
+        return getName().equals(that.getName());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getName());
-    }
-
-    @Override
-    public String toString() {
-        return getName();
     }
 }

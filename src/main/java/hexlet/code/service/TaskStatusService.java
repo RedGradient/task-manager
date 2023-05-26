@@ -1,10 +1,10 @@
 package hexlet.code.service;
 
 
-import hexlet.code.exceptions.StatusNotFoundException;
+import hexlet.code.exception.StatusNotFoundException;
 import hexlet.code.dto.TaskStatusDto;
-import hexlet.code.models.TaskStatus;
-import hexlet.code.repositories.TaskStatusRepository;
+import hexlet.code.model.TaskStatus;
+import hexlet.code.repository.TaskStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

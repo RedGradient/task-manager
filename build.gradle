@@ -130,7 +130,7 @@ liquibase {
             url 'jdbc:h2:file:./database-dev'
 
             // Сравниваем с моделями, задавая пакет
-            referenceUrl 'hibernate:spring:hexlet.code.models' +
+            referenceUrl 'hibernate:spring:hexlet.code.model' +
                     '?dialect=org.hibernate.dialect.H2Dialect' +
                     '&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy'
         }

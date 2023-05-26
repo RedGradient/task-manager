@@ -1,10 +1,9 @@
-package hexlet.code.models;
+package hexlet.code.model;
 
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -30,14 +29,14 @@ public class Task extends BaseModel {
 
     @NotBlank
     private String name;
-    @Lob
+    @NotBlank
     private String description;
     @ManyToOne
     @JoinColumn(name = "task_status_id")
     @NotNull
     private TaskStatus taskStatus;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Label> labels = new HashSet<>();
 

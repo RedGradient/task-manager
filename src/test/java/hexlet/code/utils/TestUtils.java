@@ -6,10 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hexlet.code.component.JwtHelper;
 import hexlet.code.dto.UserDto;
-import hexlet.code.models.User;
-import hexlet.code.repositories.TaskRepository;
-import hexlet.code.repositories.TaskStatusRepository;
-import hexlet.code.repositories.UserRepository;
+import hexlet.code.model.User;
+import hexlet.code.repository.TaskRepository;
+import hexlet.code.repository.TaskStatusRepository;
+import hexlet.code.repository.UserRepository;
 import hexlet.code.service.TaskService;
 import hexlet.code.service.TaskStatusService;
 import hexlet.code.service.UserService;

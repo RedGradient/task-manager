@@ -1,16 +1,17 @@
-package hexlet.code.repositories;
+package hexlet.code.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.SimpleExpression;
-import hexlet.code.models.Task;
-import hexlet.code.models.QTask;
+import hexlet.code.model.Task;
+import hexlet.code.model.QTask;
 
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-
+@Repository
 public interface TaskRepository extends
         CrudRepository<Task, Long>,
         QuerydslPredicateExecutor<Task>,

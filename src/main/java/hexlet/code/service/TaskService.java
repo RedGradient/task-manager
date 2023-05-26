@@ -2,13 +2,13 @@ package hexlet.code.service;
 
 
 import com.querydsl.core.types.Predicate;
-import hexlet.code.exceptions.TaskNotFoundException;
+import hexlet.code.exception.TaskNotFoundException;
 import hexlet.code.dto.TaskDto;
-import hexlet.code.models.Label;
-import hexlet.code.models.Task;
-import hexlet.code.repositories.LabelRepository;
-import hexlet.code.repositories.TaskRepository;
-import hexlet.code.repositories.UserRepository;
+import hexlet.code.model.Label;
+import hexlet.code.model.Task;
+import hexlet.code.repository.LabelRepository;
+import hexlet.code.repository.TaskRepository;
+import hexlet.code.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

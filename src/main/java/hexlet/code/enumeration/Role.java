@@ -1,4 +1,4 @@
-package hexlet.code.enums;
+package hexlet.code.enumeration;
 
 public enum Role {
     USER, ADMIN

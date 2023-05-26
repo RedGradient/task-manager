@@ -1,9 +1,9 @@
 package hexlet.code.service;
 
-import hexlet.code.exceptions.LabelNotFoundException;
+import hexlet.code.exception.LabelNotFoundException;
 import hexlet.code.dto.LabelDto;
-import hexlet.code.models.Label;
-import hexlet.code.repositories.LabelRepository;
+import hexlet.code.model.Label;
+import hexlet.code.repository.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

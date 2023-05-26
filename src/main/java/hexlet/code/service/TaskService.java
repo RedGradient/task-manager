@@ -57,18 +57,8 @@ public class TaskService {
     }
 
     public Task udpateTask(Long id, TaskDto taskDto) {
-        var updatedLabels = new HashSet<Label>();
-        for (long labelId : taskDto.getLabelIds()) {
-            updatedLabels.add(labelService.getLabelById(labelId));
-        }
-
-        var task = getTaskById(id);
-        task.setName(taskDto.getName());
-        task.setDescription(taskDto.getDescription());
-        task.setTaskStatus(statusService.getStatusById(taskDto.getTaskStatusId()));
-        task.setLabels(updatedLabels);
-        task.setExecutor(userService.getUserById(taskDto.getExecutorId()));
-
+        var task = fromDto(taskDto);
+        task.setId(id);
         return taskRepository.save(task);
     }
 

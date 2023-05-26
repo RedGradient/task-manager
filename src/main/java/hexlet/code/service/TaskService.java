@@ -46,19 +46,21 @@ public class TaskService {
         return taskRepository.findAll(predicate);
     }
 
-    public Task createTask(TaskDto taskDto) {
-        return taskRepository.save(fromDto(taskDto));
-    }
-
     public Task getTaskById(Long id) {
         return taskRepository.findById(id).orElseThrow(
                 () -> new TaskNotFoundException(id)
         );
     }
 
-    public Task udpateTask(Long id, TaskDto taskDto) {
-        var task = fromDto(taskDto);
-        task.setId(id);
+    public Task createTask(TaskDto taskDto) {
+        var task = new Task();
+        fillTaskFromDto(task, taskDto);
+        return taskRepository.save(task);
+    }
+
+    public Task updateTask(Long id, TaskDto taskDto) {
+        var task = taskRepository.findById(id).orElseThrow();
+        fillTaskFromDto(task, taskDto);
         return taskRepository.save(task);
     }
 
@@ -66,19 +68,17 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    public Task fromDto(TaskDto taskDto) {
+    public void fillTaskFromDto(Task task, TaskDto taskDto) {
         var labels = new HashSet<Label>();
-        taskDto.getLabelIds().forEach(
-                (id) -> labels.add(labelService.getLabelById(id))
-        );
+        for (var id : taskDto.getLabelIds()) {
+            labels.add(labelService.getLabelById(id));
+        }
 
-        return Task.builder()
-            .name(taskDto.getName())
-            .description(taskDto.getDescription())
-            .taskStatus(statusService.getStatusById(taskDto.getTaskStatusId()))
-            .labels(labels)
-            .author(userService.getCurrentUser())
-            .executor(userService.getUserById(taskDto.getExecutorId()))
-            .build();
+        task.setName(taskDto.getName());
+        task.setDescription(taskDto.getDescription());
+        task.setTaskStatus(statusService.getStatusById(taskDto.getTaskStatusId()));
+        task.setLabels(labels);
+        task.setAuthor(userService.getCurrentUser());
+        task.setExecutor(userService.getUserById(taskDto.getExecutorId()));
     }
 }

@@ -82,7 +82,7 @@ public class TaskController {
     @PutMapping(ID)
     public Task updateTask(@Parameter(description = "id of task to be updated") @PathVariable Long id,
                            @RequestBody TaskDto taskDto) {
-        return taskService.udpateTask(id, taskDto);
+        return taskService.updateTask(id, taskDto);
     }
 
     @Operation(description = "Delete task by id")

@@ -7,4 +7,4 @@
 # Task Manager
 Task Manager is a web app that allows to perform management over tasks, assign them to different performers and track it's implementation.
 
-[[Application]()] [[Swagger]()]
+[[Application](https://task-manager-awm2.onrender.com)] [[Swagger](https://task-manager-awm2.onrender.com/swagger.html)]

@@ -29,7 +29,6 @@ public class Task extends BaseModel {
 
     @NotBlank
     private String name;
-    @NotBlank
     private String description;
     @ManyToOne
     @JoinColumn(name = "task_status_id")

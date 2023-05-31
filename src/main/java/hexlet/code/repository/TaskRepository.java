@@ -11,6 +11,8 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TaskRepository extends
         CrudRepository<Task, Long>,
@@ -31,5 +33,7 @@ public interface TaskRepository extends
         });
 
     }
+
+    List<Task> findAllByTaskStatusId(Long id);
 
 }

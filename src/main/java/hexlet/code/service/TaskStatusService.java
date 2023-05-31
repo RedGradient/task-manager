@@ -3,7 +3,9 @@ package hexlet.code.service;
 
 import hexlet.code.exception.StatusNotFoundException;
 import hexlet.code.dto.TaskStatusDto;
+import hexlet.code.exception.TaskStatusInUseException;
 import hexlet.code.model.TaskStatus;
+import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,9 @@ public class TaskStatusService {
 
     @Autowired
     private TaskStatusRepository repository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     public Iterable<TaskStatus> getStatuses() {
         return repository.findAll();
@@ -37,6 +42,9 @@ public class TaskStatusService {
     }
 
     public void deleteStatus(Long id) {
+        if (taskRepository.findAllByTaskStatusId(id).size() != 0) {
+            throw new TaskStatusInUseException();
+        }
         repository.deleteById(id);
     }
 

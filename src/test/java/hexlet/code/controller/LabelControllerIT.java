@@ -23,6 +23,7 @@ import java.util.List;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -92,6 +93,8 @@ public class LabelControllerIT {
                 .getResponse()
                 .getContentAsString();
         List<Label> labels = fromJson(json, new TypeReference<>() { });
+
+        assertNotNull(labels);
         assertEquals(3, labels.size());
     }
 
@@ -132,7 +135,7 @@ public class LabelControllerIT {
         var request = delete(LABEL_CONTROLLER + ID, label.getId());
         utils.perform(request, TEST_USERNAME).andExpect(status().isOk());
 
-        assertEquals(0, labelService.getAllLabels().size());
+        assertEquals(0, labelRepository.count());
     }
 
     @Test

@@ -23,10 +23,7 @@ import static hexlet.code.utils.TestUtils.fromJson;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -82,6 +79,10 @@ public class TaskStatusControllerIT {
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
+
+        final TaskStatus statusFromResponse = fromJson(response.getContentAsString(), new TypeReference<>() { });
+        assertNotNull(statusFromResponse);
+        assertEquals(statusFromResponse, status);
     }
 
     @Test
@@ -118,7 +119,12 @@ public class TaskStatusControllerIT {
                 .contentType(APPLICATION_JSON);
         utils.perform(request, TEST_USERNAME).andExpect(status().isOk());
 
-        assertEquals(statusRepository.findById(status.getId()).get().getName(), updatedName);
+        var updatedStatusOptional = statusRepository.findById(status.getId());
+        assertTrue(updatedStatusOptional.isPresent());
+
+        var updatedStatus = updatedStatusOptional.get();
+        assertNotNull(updatedStatus);
+        assertEquals(updatedStatus.getName(), updatedName);
     }
 
     @Test

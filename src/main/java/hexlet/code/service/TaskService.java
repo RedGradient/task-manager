@@ -79,6 +79,9 @@ public class TaskService {
         task.setTaskStatus(statusService.getStatusById(taskDto.getTaskStatusId()));
         task.setLabels(labels);
         task.setAuthor(userService.getCurrentUser());
-        task.setExecutor(userService.getUserById(taskDto.getExecutorId()));
+        Long executorId = taskDto.getExecutorId();
+        if (executorId != null) {
+            task.setExecutor(userService.getUserById(executorId));
+        }
     }
 }

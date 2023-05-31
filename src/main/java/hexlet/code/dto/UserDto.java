@@ -1,9 +1,9 @@
 package hexlet.code.dto;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -25,6 +25,6 @@ public class UserDto {
     private String lastName;
 
     @NotBlank
-    @Min(3)
+    @Size(min = 3)
     private String password;
 }

@@ -1,6 +1,6 @@
 package hexlet.code.dto;
 
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -25,6 +25,6 @@ public class UserDto {
     private String lastName;
 
     @NotBlank
-    @Size(min = 5, max = 100)
+    @Min(3)
     private String password;
 }

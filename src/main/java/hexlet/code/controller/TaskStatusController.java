@@ -1,7 +1,6 @@
 package hexlet.code.controller;
 
 import hexlet.code.dto.TaskStatusDto;
-import hexlet.code.exception.TaskStatusInUseException;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.service.TaskStatusService;
 

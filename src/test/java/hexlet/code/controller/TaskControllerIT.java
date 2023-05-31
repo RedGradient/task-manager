@@ -20,8 +20,8 @@ import hexlet.code.service.TaskStatusService;
 import hexlet.code.service.UserService;
 import hexlet.code.utils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,8 +52,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles(TEST_PROFILE)
@@ -64,7 +62,6 @@ public class TaskControllerIT {
 
     private static final String TASK_CONTROLLER = "/api/tasks";
     private static final String EXECUTOR_USERNAME = "executor@mail.com";
-
 
     @Autowired
     private TaskService taskService;
@@ -85,10 +82,6 @@ public class TaskControllerIT {
     @Autowired
     private TestUtils utils;
 
-    @BeforeAll
-    public void beforeAll() throws Exception {
-
-    }
     @BeforeEach
     public void beforeEach() throws Exception {
         utils.regDefaultUser();
@@ -163,67 +156,120 @@ public class TaskControllerIT {
         assertEquals(newTaskCount, tasks.size());
     }
 
-    @Test
-    public void getTasksByParams() throws Exception {
-        var user1 = utils.getUserByEmail(TEST_USERNAME);
-        var user2 = utils.getUserByEmail(EXECUTOR_USERNAME);
-        var taskStatus1 = statusService.createNewStatus(new TaskStatusDto("Status 1"));
-        var taskStatus2 = statusService.createNewStatus(new TaskStatusDto("Status 2"));
+    @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    class FiltrationTest {
+        private static final String STATUS_NAME_1 = "Status 1";
+        private static final String STATUS_NAME_2 = "Status 2";
+        private static final String LABEL_NAME_1 = "Label 1";
+        private static final String LABEL_NAME_2 = "Label 2";
+        private static final String LABEL_NAME_3 = "Label 3";
+        private static final String DESCRIPTION = "Description";
+        private static final String TASK_NAME_1 = "Task 1";
+        private static final String TASK_NAME_2 = "Task 2";
+        private static final String TASK_NAME_3 = "Task 3";
 
-        var labels1 = new HashSet<Label>();
-        var labels2 = new HashSet<Label>();
-        var label1 = labelService.createLabel(new LabelDto("Label 1"));
-        var label2 = labelService.createLabel(new LabelDto("Label 2"));
-        var label3 = labelService.createLabel(new LabelDto("Label 3"));
-        labels1.add(label1);
-        labels2.add(label2);
-        labels2.add(label3);
+        void tearDown() {
+            taskRepository.deleteAll();
+            statusRepository.deleteAll();
+            labelRepository.deleteAll();
+            userRepository.deleteAll();
+        }
 
-        taskRepository.save(new Task("Task 1", "Descr", taskStatus1, labels1, user1, user2));
-        taskRepository.save(new Task("Task 2", "Descr", taskStatus2, labels2, user2, user1));
-        taskRepository.save(new Task("Task 3", "Descr", taskStatus2, labels2, user2, user2));
+        @BeforeEach
+        void beforeEach() throws Exception {
+            tearDown();
 
-        // check param: 'taskStatusId'
-        final long expectedTaskStatusId = statusRepository.findByName(taskStatus2.getName()).get().getId();
-        var request1 = get(TASK_CONTROLLER)
-                .param("taskStatusId", String.valueOf(expectedTaskStatusId));
-        var response1 = utils.perform(request1).andExpect(status().isOk()).andReturn().getResponse();
-        final List<Task> tasks1 = fromJson(response1.getContentAsString(), new TypeReference<>() { });
-        assertEquals(2, tasks1.size(), "Collection has incorrect size");
-        assertEquals(expectedTaskStatusId, tasks1.get(0).getTaskStatus().getId(), "Task has incorrect task status");
+            utils.regDefaultUser();
 
-        // check param: 'authorId'
-        final long expectedAuthorId = utils.getUserByEmail(TEST_USERNAME).getId();
-        var request2 = get(TASK_CONTROLLER)
-                .param("authorId", String.valueOf(expectedAuthorId));
-        var response2 = utils.perform(request2)
-                .andExpect(status().isOk()).andReturn().getResponse();
-        final List<Task> tasks2 = fromJson(response2.getContentAsString(), new TypeReference<>() { });
-        assertEquals(1, tasks2.size(), "Collection has incorrect size");
-        assertEquals(expectedAuthorId, tasks2.get(0).getAuthor().getId(), "Task has incorrect author");
+            userService.createNewUser(new UserDto(
+                    EXECUTOR_USERNAME,
+                    "Good",
+                    "Executor",
+                    "12345"
+            ));
 
-        // check param: 'executorId'
-        var expectedExecutorId = utils.getUserByEmail(EXECUTOR_USERNAME).getId();
-        var request3 = get(TASK_CONTROLLER)
-                .param("executorId", String.valueOf(expectedExecutorId));
-        var response3 = utils.perform(request3)
-                .andExpect(status().isOk()).andReturn().getResponse();
-        final List<Task> tasks3 = fromJson(response3.getContentAsString(), new TypeReference<>() { });
-        assertEquals(2, tasks3.size(), "Collection has incorrect size");
-        assertEquals(expectedExecutorId, tasks3.get(0).getExecutor().getId(), "Task has incorrect executor");
-        assertEquals(expectedExecutorId, tasks3.get(1).getExecutor().getId(), "Task has incorrect executor");
+            prepareData();
+        }
 
-        // check param: 'labels'
-        var expectedLabelId = labelRepository.findByName(label1.getName()).get().getId();
-        var request4 = get(TASK_CONTROLLER)
-                .param("labels", String.valueOf(expectedLabelId));
-        var response4 = utils.perform(request4)
-                .andExpect(status().isOk()).andReturn().getResponse();
-        final List<Task> tasks4 = fromJson(response4.getContentAsString(), new TypeReference<>() { });
-        assertEquals(1, tasks4.size(), "Collection has incorrect size");
-        assertTrue(tasks4.get(0).getLabels().contains(label1), "Task has incorrect label");
+        void prepareData() {
+            var user1 = utils.getUserByEmail(TEST_USERNAME);
+            var user2 = utils.getUserByEmail(EXECUTOR_USERNAME);
+
+            var taskStatus1 = statusService.createNewStatus(new TaskStatusDto(STATUS_NAME_1));
+            var taskStatus2 = statusService.createNewStatus(new TaskStatusDto(STATUS_NAME_2));
+
+            var labels1 = new HashSet<Label>();
+            var labels2 = new HashSet<Label>();
+
+            var label1 = labelService.createLabel(new LabelDto(LABEL_NAME_1));
+            var label2 = labelService.createLabel(new LabelDto(LABEL_NAME_2));
+            var label3 = labelService.createLabel(new LabelDto(LABEL_NAME_3));
+
+            labels1.add(label1);
+            labels2.add(label2);
+            labels2.add(label3);
+
+            taskRepository.save(new Task(TASK_NAME_1, DESCRIPTION, taskStatus1, labels1, user1, user2));
+            taskRepository.save(new Task(TASK_NAME_2, DESCRIPTION, taskStatus2, labels2, user2, user1));
+            taskRepository.save(new Task(TASK_NAME_3, DESCRIPTION, taskStatus2, labels2, user2, user2));
+        }
+
+        @Test
+        public void filterByTaskStatusId() throws Exception {
+            var expectedStatusOptional = statusRepository.findByName(STATUS_NAME_2);
+
+            assertTrue(expectedStatusOptional.isPresent());
+
+            var expectedStatusId = expectedStatusOptional.get().getId();
+            var request = get(TASK_CONTROLLER).param("taskStatusId", String.valueOf(expectedStatusId));
+            var response = utils.perform(request).andExpect(status().isOk()).andReturn().getResponse();
+
+            final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
+            assertEquals(2, tasks.size(), "Collection has incorrect size");
+            assertEquals(expectedStatusId, tasks.get(0).getTaskStatus().getId(), "Task has incorrect task status");
+        }
+
+        @Test
+        public void filterByAuthorId() throws Exception {
+            var expectedAuthorId = utils.getUserByEmail(TEST_USERNAME).getId();
+            var request = get(TASK_CONTROLLER).param("authorId", String.valueOf(expectedAuthorId));
+            var response = utils.perform(request).andExpect(status().isOk()).andReturn().getResponse();
+
+            final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
+            assertEquals(1, tasks.size(), "Collection has incorrect size");
+            assertEquals(expectedAuthorId, tasks.get(0).getAuthor().getId(), "Task has incorrect author");
+        }
+
+        @Test
+        public void filterByExecutorId() throws Exception {
+            var expectedExecutorId = utils.getUserByEmail(EXECUTOR_USERNAME).getId();
+            var request = get(TASK_CONTROLLER) .param("executorId", String.valueOf(expectedExecutorId));
+            var response = utils.perform(request) .andExpect(status().isOk()).andReturn().getResponse();
+
+            final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
+            assertEquals(2, tasks.size(), "Collection has incorrect size");
+            assertEquals(expectedExecutorId, tasks.get(0).getExecutor().getId(), "Task has incorrect executor");
+            assertEquals(expectedExecutorId, tasks.get(1).getExecutor().getId(), "Task has incorrect executor");
+        }
+
+        @Test
+        public void getTasksByLabelId() throws Exception {
+            var expectedLabelOptional = labelRepository.findByName(LABEL_NAME_1);
+
+            assertTrue(expectedLabelOptional.isPresent());
+
+            var expectedLabelId = expectedLabelOptional.get().getId();
+            var request = get(TASK_CONTROLLER).param("labels", String.valueOf(expectedLabelId));
+            var response = utils.perform(request).andExpect(status().isOk()).andReturn().getResponse();
+
+            final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
+            assertEquals(1, tasks.size(), "Collection has incorrect size");
+            var labels = tasks.get(0).getLabels();
+            var isAnyLabelWithExpectedName = labels.stream().anyMatch((label) -> label.getName().equals(LABEL_NAME_1));
+            assertTrue(isAnyLabelWithExpectedName, "Task has incorrect label");
+        }
     }
-
 
     @Test
     public void getTaskById() throws Exception {
@@ -315,7 +361,9 @@ public class TaskControllerIT {
                 .contentType(APPLICATION_JSON);
         utils.perform(request, TEST_USERNAME).andExpect(status().isOk());
 
-        var updatedTask = taskRepository.findById(oldTask.getId()).get();
+        var updatedTaskOptional = taskRepository.findById(oldTask.getId());
+        assertTrue(updatedTaskOptional.isPresent());
+        var updatedTask = updatedTaskOptional.get();
         assertEquals(newName, updatedTask.getName());
         assertEquals(newDescr, updatedTask.getDescription());
         assertEquals(newStatus, updatedTask.getTaskStatus());
@@ -356,14 +404,15 @@ public class TaskControllerIT {
                 .contentType(APPLICATION_JSON);
         utils.perform(request).andExpect(status().isForbidden());
 
-        var task = taskRepository.findById(oldTask.getId()).get();
+        var taskOptional = taskRepository.findById(oldTask.getId());
+        assertTrue(taskOptional.isPresent());
+        var task = taskOptional.get();
         assertEquals(oldTask.getName(), task.getName());
         assertEquals(oldTask.getDescription(), task.getDescription());
         assertEquals(oldTask.getTaskStatus(), task.getTaskStatus());
         assertEquals(oldTask.getLabels(), task.getLabels());
         assertEquals(oldTask.getExecutor(), task.getExecutor());
     }
-
 
     @Test
     public void deleteTask() throws Exception {

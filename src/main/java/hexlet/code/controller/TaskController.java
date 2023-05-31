@@ -37,7 +37,7 @@ public class TaskController {
 
     private static final String AUTHENTICATED = "isAuthenticated()";
     private static final String ONLY_OWNER_BY_ID = """
-        @taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.name
+        (@taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.name)
         """;
 
     @Autowired
@@ -78,7 +78,7 @@ public class TaskController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Task.class))),
         @ApiResponse(responseCode = "404", description = "Task with that id not found")
     })
-    @PreAuthorize(ONLY_OWNER_BY_ID)
+    @PreAuthorize(AUTHENTICATED + " and " + ONLY_OWNER_BY_ID)
     @PutMapping(ID)
     public Task updateTask(@Parameter(description = "id of task to be updated") @PathVariable Long id,
                            @RequestBody TaskDto taskDto) {

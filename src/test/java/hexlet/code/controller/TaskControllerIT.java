@@ -324,10 +324,7 @@ public class TaskControllerIT {
 
     }
 
-    @Test
-    public void updateTask() throws Exception {
-        var oldTask = createDefaultTask();
-
+    TaskDto createTaskDto() throws Exception {
         var newName = "New Task";
         var newDescr = "New Descr";
         var newStatus = statusService.createNewStatus(new TaskStatusDto("New Status"));
@@ -348,24 +345,36 @@ public class TaskControllerIT {
         utils.regUser(newExecutorDto);
         var newExecutor = userService.getUserByEmail(newExecutorEmail);
 
-        var newTaskDto = new TaskDto(
+        return new TaskDto(
                 newName,
                 newDescr,
                 newStatus.getId(),
                 newLabelIds,
                 newExecutor.getId()
         );
+    }
+
+    @Test
+    public void updateTask() throws Exception {
+        var oldTask = createDefaultTask();
+        var newTaskDto = createTaskDto();
 
         var request = put(TASK_CONTROLLER + ID, oldTask.getId())
                 .content(asJson(newTaskDto))
                 .contentType(APPLICATION_JSON);
+
         utils.perform(request, TEST_USERNAME).andExpect(status().isOk());
 
         var updatedTaskOptional = taskRepository.findById(oldTask.getId());
         assertTrue(updatedTaskOptional.isPresent());
         var updatedTask = updatedTaskOptional.get();
-        assertEquals(newName, updatedTask.getName());
-        assertEquals(newDescr, updatedTask.getDescription());
+        var newStatus = statusService.getStatusById(newTaskDto.getTaskStatusId());
+        var newLabels = newTaskDto.getLabelIds().stream()
+                .map((id) -> labelService.getLabelById(id)).collect(Collectors.toSet());
+        var newExecutor = userService.getUserById(newTaskDto.getExecutorId());
+
+        assertEquals(newTaskDto.getName(), updatedTask.getName());
+        assertEquals(newTaskDto.getDescription(), updatedTask.getDescription());
         assertEquals(newStatus, updatedTask.getTaskStatus());
         assertEquals(newLabels, updatedTask.getLabels());
         assertEquals(newExecutor, updatedTask.getExecutor());

@@ -1,6 +1,7 @@
 package hexlet.code.controller;
 
 import hexlet.code.dto.TaskStatusDto;
+import hexlet.code.exception.TaskStatusInUseException;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.service.TaskStatusService;
 
@@ -80,7 +81,8 @@ public class TaskStatusController {
     @Operation(description = "Delete status by id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Status deleted", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Status with that id not found", content = @Content)
+        @ApiResponse(responseCode = "404", description = "Status with that id not found", content = @Content),
+        @ApiResponse(responseCode = "409", description = "Status can not be deleted as it is used in a task", content = @Content)
     })
     @PreAuthorize(AUTHENTICATED)
     @DeleteMapping(ID)

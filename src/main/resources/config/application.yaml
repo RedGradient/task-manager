@@ -11,7 +11,7 @@ jwt:
 
 spring:
   profiles:
-    active: dev
+    active: ${APP_ENV:dev}
 
   application:
     name: taskManager

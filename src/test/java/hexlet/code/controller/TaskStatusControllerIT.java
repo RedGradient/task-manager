@@ -23,7 +23,10 @@ import static hexlet.code.utils.TestUtils.fromJson;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;

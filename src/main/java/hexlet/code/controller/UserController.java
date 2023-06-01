@@ -32,6 +32,7 @@ public class UserController {
 
     public static final String ID = "/{id}";
     public static final String USER_CONTROLLER_PATH = "/users";
+    private static final String AUTHENTICATED = "isAuthenticated()";
     private static final String ONLY_OWNER_BY_ID = """
         @userRepository.findById(#id).get().getEmail() == authentication.name
         """;
@@ -54,7 +55,7 @@ public class UserController {
         @ApiResponse(responseCode = "404", description = "User with that id not found", content = @Content)
     })
     @GetMapping(ID)
-    @PreAuthorize(ONLY_OWNER_BY_ID)
+    @PreAuthorize(AUTHENTICATED + " and " + ONLY_OWNER_BY_ID)
     public User getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
@@ -73,7 +74,7 @@ public class UserController {
         @ApiResponse(responseCode = "200", description = "User deleted"),
         @ApiResponse(responseCode = "404", description = "User with that id not found", content = @Content)
     })
-    @PreAuthorize(ONLY_OWNER_BY_ID)
+    @PreAuthorize(AUTHENTICATED + " and " + ONLY_OWNER_BY_ID)
     @DeleteMapping(ID)
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
@@ -84,7 +85,7 @@ public class UserController {
         @ApiResponse(responseCode = "200", description = "User updated"),
         @ApiResponse(responseCode = "404", description = "User with that id not found")
     })
-    @PreAuthorize(ONLY_OWNER_BY_ID)
+    @PreAuthorize(AUTHENTICATED + " and " + ONLY_OWNER_BY_ID)
     @PutMapping(ID)
     public User updateUser(@PathVariable Long id, @RequestBody UserDto updatedUser) {
         return userService.updateUser(id, updatedUser);

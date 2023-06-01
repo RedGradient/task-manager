@@ -34,10 +34,9 @@ import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
 public class TaskController {
     public static final String TASK_CONTROLLER_PATH = "/tasks";
     public static final String ID = "/{id}";
-
     private static final String AUTHENTICATED = "isAuthenticated()";
     private static final String ONLY_OWNER_BY_ID = """
-        (@taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.name)
+        @taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.name
         """;
 
     @Autowired
@@ -90,7 +89,7 @@ public class TaskController {
         @ApiResponse(responseCode = "200", description = "Task deleted", content = @Content),
         @ApiResponse(responseCode = "404", description = "Task with that id not found", content = @Content)
     })
-    @PreAuthorize(ONLY_OWNER_BY_ID)
+    @PreAuthorize(AUTHENTICATED + " and " + ONLY_OWNER_BY_ID)
     @DeleteMapping(ID)
     public void deleteTask(@Parameter(description = "id of task to be deleted") @PathVariable Long id) {
         taskService.deleteTaskById(id);

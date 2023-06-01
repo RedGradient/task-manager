@@ -50,7 +50,6 @@ public class LabelController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Label.class))),
         @ApiResponse(responseCode = "404", description = "Label with that id not found", content = @Content)
     })
-    @PreAuthorize(AUTHENTICATED)
     @GetMapping(ID)
     public Label getLabelById(@PathVariable Long id) {
         return labelService.getLabelById(id);

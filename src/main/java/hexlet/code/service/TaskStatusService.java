@@ -3,7 +3,6 @@ package hexlet.code.service;
 
 import hexlet.code.exception.StatusNotFoundException;
 import hexlet.code.dto.TaskStatusDto;
-import hexlet.code.exception.TaskStatusInUseException;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;

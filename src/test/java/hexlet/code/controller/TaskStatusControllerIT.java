@@ -125,8 +125,7 @@ public class TaskStatusControllerIT {
 
         var updatedStatusOptional = statusRepository.findById(status.getId());
         assertTrue(updatedStatusOptional.isPresent());
-
-        var updatedStatus = updatedStatusOptional.get();
+        var updatedStatus = updatedStatusOptional.orElse(null);
         assertNotNull(updatedStatus);
         assertEquals(updatedStatus.getName(), updatedName);
     }
@@ -142,7 +141,9 @@ public class TaskStatusControllerIT {
                 .contentType(APPLICATION_JSON);
         utils.perform(request).andExpect(status().isForbidden());
 
-        assertNotEquals(statusRepository.findById(status.getId()).get().getName(), updatedName);
+        var updatedStatusOptional = statusRepository.findById(status.getId());
+        assertTrue(updatedStatusOptional.isPresent());
+        assertNotEquals(updatedStatusOptional.get().getName(), updatedName);
     }
 
     @Test

@@ -14,7 +14,7 @@ spring:
     active: ${APP_ENV:dev}
 
   application:
-    name: taskManager
+    name: TaskManager
 
   liquibase:
     enabled: true

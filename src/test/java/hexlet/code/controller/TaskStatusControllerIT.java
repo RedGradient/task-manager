@@ -125,9 +125,7 @@ public class TaskStatusControllerIT {
 
         var updatedStatusOptional = statusRepository.findById(status.getId());
         assertTrue(updatedStatusOptional.isPresent());
-        var updatedStatus = updatedStatusOptional.orElse(null);
-        assertNotNull(updatedStatus);
-        assertEquals(updatedStatus.getName(), updatedName);
+        assertEquals(updatedStatusOptional.get().getName(), updatedName);
     }
 
     @Test

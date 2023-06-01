@@ -42,9 +42,6 @@ public class TaskStatusService {
     }
 
     public void deleteStatus(Long id) {
-        if (taskRepository.findAllByTaskStatusId(id).size() != 0) {
-            throw new TaskStatusInUseException();
-        }
         repository.deleteById(id);
     }
 

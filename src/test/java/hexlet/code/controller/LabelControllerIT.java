@@ -77,6 +77,7 @@ public class LabelControllerIT {
 
         Label label = fromJson(json, new TypeReference<>() { });
 
+        assertNotNull(label);
         assertEquals(labelName, label.getName());
     }
 
@@ -145,7 +146,7 @@ public class LabelControllerIT {
         var request = delete(LABEL_CONTROLLER + ID, label.getId());
         utils.perform(request).andExpect(status().isForbidden());
 
-        assertEquals(1, labelService.getAllLabels().size());
+        assertEquals(1, labelRepository.count());
     }
 
 }

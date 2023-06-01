@@ -41,8 +41,7 @@ import static hexlet.code.controller.TaskController.ID;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME;
 import static hexlet.code.utils.TestUtils.asJson;
 import static hexlet.code.utils.TestUtils.fromJson;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -128,6 +127,7 @@ public class TaskControllerIT {
                 response.getContentAsString(), new TypeReference<>() { }
         );
 
+        assertNotNull(task);
         assertTrue(taskRepository.findById(task.getId()).isPresent());
     }
 
@@ -153,6 +153,7 @@ public class TaskControllerIT {
                 .andReturn().getResponse();
         final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
+        assertNotNull(tasks);
         assertEquals(newTaskCount, tasks.size());
     }
 
@@ -226,6 +227,7 @@ public class TaskControllerIT {
             var response = utils.perform(request).andExpect(status().isOk()).andReturn().getResponse();
 
             final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
+            assertNotNull(tasks);
             assertEquals(2, tasks.size(), "Collection has incorrect size");
             assertEquals(expectedStatusId, tasks.get(0).getTaskStatus().getId(), "Task has incorrect task status");
         }
@@ -237,6 +239,7 @@ public class TaskControllerIT {
             var response = utils.perform(request).andExpect(status().isOk()).andReturn().getResponse();
 
             final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
+            assertNotNull(tasks);
             assertEquals(1, tasks.size(), "Collection has incorrect size");
             assertEquals(expectedAuthorId, tasks.get(0).getAuthor().getId(), "Task has incorrect author");
         }
@@ -248,6 +251,7 @@ public class TaskControllerIT {
             var response = utils.perform(request) .andExpect(status().isOk()).andReturn().getResponse();
 
             final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
+            assertNotNull(tasks);
             assertEquals(2, tasks.size(), "Collection has incorrect size");
             assertEquals(expectedExecutorId, tasks.get(0).getExecutor().getId(), "Task has incorrect executor");
             assertEquals(expectedExecutorId, tasks.get(1).getExecutor().getId(), "Task has incorrect executor");
@@ -264,6 +268,7 @@ public class TaskControllerIT {
             var response = utils.perform(request).andExpect(status().isOk()).andReturn().getResponse();
 
             final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
+            assertNotNull(tasks);
             assertEquals(1, tasks.size(), "Collection has incorrect size");
             var labels = tasks.get(0).getLabels();
             var isAnyLabelWithExpectedName = labels.stream().anyMatch((label) -> label.getName().equals(LABEL_NAME_1));
@@ -297,6 +302,7 @@ public class TaskControllerIT {
                 response.getContentAsString(), new TypeReference<>() { }
         );
 
+        assertNotNull(recievedTask);
         assertEquals(task.getName(), recievedTask.getName());
     }
 

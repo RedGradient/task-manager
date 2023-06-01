@@ -71,6 +71,7 @@ public class TaskStatusControllerIT {
                 response.getContentAsString(), new TypeReference<>() { }
         );
 
+        assertNotNull(statuses);
         assertEquals(1, statuses.size());
     }
 

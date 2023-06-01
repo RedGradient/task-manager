@@ -83,6 +83,7 @@ public class UserControllerIT {
         final User user = fromJson(response.getContentAsString(), new TypeReference<>() {
         });
 
+        assertNotNull(user);
         assertEquals(expectedUser.getId(), user.getId());
         assertEquals(expectedUser.getEmail(), user.getEmail());
         assertEquals(expectedUser.getFirstName(), user.getFirstName());
